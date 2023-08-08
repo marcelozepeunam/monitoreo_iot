@@ -61,15 +61,15 @@ def define_categoria(lectura_iuv):
     global categoria
 
     if lectura_iuv <= 2:
-        categoria = "BAJA"
+        categoria = "BAJO"
     elif lectura_iuv >= 3 and lectura_iuv <= 5:
-        categoria = "MODERADA"
+        categoria = "MODERADO"
     elif lectura_iuv >= 6 and lectura_iuv <= 7:
-        categoria = "ALTA"
+        categoria = "ALTO"
     elif lectura_iuv >= 8 and lectura_iuv <= 10:
-        categoria = "MUY ALTA"
+        categoria = "MUY ALTO"
     elif lectura_iuv >= 11:
-        categoria = "EXTREMA"
+        categoria = "EXTREMO"
 
 
 #Esta funcion debe de adquirir los datos al finalizar todas las lecturas

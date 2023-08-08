@@ -1,3 +1,6 @@
+'''Pendientes
+Hacer un prompt más especifico'''
+
 import os 
 import openai
 import spacy
@@ -15,7 +18,8 @@ def recomendacion(categoria):
     modelo = "text-davinci-002"
     prompt = f'''Actua como experto en Protección Solar.
     Dime algun dato curioso para prevenir y tener cuidado
-    ante un índice UV solar de categoria {categoria}'''  
+    ante un índice UV solar de categoria {categoria}.
+    '''  
 
 
     pyautogui.press('enter')
@@ -23,20 +27,22 @@ def recomendacion(categoria):
         engine=modelo,
         prompt=prompt,
         n=1,
-
-        temperature=1,
-        max_tokens=100,
+        temperature=0.7,
+        max_tokens=300
+        ,
     )
     respuesta_de_recomendacion = respuesta.choices[0].text.strip() 
     return respuesta_de_recomendacion
 
 
 # Invocando a la función
-categoria = "muy alta"
-
+categoria = "muy alto"
 respuesta_de_recomendacion = recomendacion(categoria)
 print("\nRecomendación: ")
 print(respuesta_de_recomendacion)
-from voz_artificial import  artificial_voice(respuesta_de_recomendacion)
+#?
+# from voz_artificial import  artificial_voice(respuesta_de_recomendacion)
+
+
 
 
