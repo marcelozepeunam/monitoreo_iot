@@ -13,7 +13,7 @@ def artificial_voice():
 
 
     CHUNK_SIZE = 1024
-    url = f"https://api.elevenlabs.io/v1/text-to-speech/21m00Tcm4TlvDq8ikWAM"
+    url = f"https://api.elevenlabs.io/v1/text-to-speech/21m00Tcm4TlvDq8ikWAM" #Agregar voice id despues de ""speech/#
 
     # Obtener la clave API de ElevenLabs desde el archivo .env
     XI_API_KEY = os.getenv("ELEVEN_API_KEY")
@@ -40,6 +40,15 @@ def artificial_voice():
                 f.write(chunk)
 
 artificial_voice()
+
+
+
+
+
+
+
+
+
 
 
 

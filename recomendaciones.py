@@ -20,7 +20,7 @@ def recomendacion(categoria):
     prompt = f'''Actua como experto en Protección Solar.
     Dime algun dato curioso para prevenir y tener cuidado
     ante un índice UV solar de categoria {categoria}
-    No menciones números, ni tampoco horas. '''  
+    No menciones numeros ni horarios '''  
 
 
     pyautogui.press('enter')
@@ -37,10 +37,11 @@ def recomendacion(categoria):
 
 
 # Invocando a la función
-categoria = "muy alto"
+categoria = "muy alta"
 respuesta_de_recomendacion = recomendacion(categoria)
 print("\nRecomendación: ")
 print(respuesta_de_recomendacion)
+
 
 
 
