@@ -8,24 +8,34 @@
    hora de iuv min'''
 
 
+
+
 import matplotlib.pyplot as plt
-import numpy as np  
+import numpy as np
 
 def grafica_barras():
-    # Datos de ejemplo para la gráfica de barras
-    horarios = ["08:00", "10:00", "12:00", "14:00", "16:00"]
-    iuv = [5, 7, 9, 6, 8]
+    # Datos para la gráfica de barras
+    horarios = ["08:00", "10:00", "12:00", "14:00", "16:00"] * 12
+    iuv = [1,2,2,3,1] * 12
+
+    print("Elementos de horarios: ", len(horarios))
+    print("Elementos de iuv: ", len(iuv))
+
+    # Generar índices numéricos para el eje x usando np.arange()
+    indices = np.arange(len(horarios))
 
     # Crear la gráfica de barras
-    plt.bar(horarios, iuv, color='blue')
+    plt.bar(indices, iuv, color='blue')
 
     # Agregar etiquetas y título
-    plt.xlabel("Horario")
-    plt.ylabel("IUV")
+    plt.xticks(indices, horarios, rotation=45)
+    plt.xlabel("Horarios de lectura")
+    plt.ylabel("Índices ultravioletas")
     plt.title("Índice Ultravioleta por Horario")
 
     # Mostrar la gráfica
     plt.show()
+
 
 
 
@@ -51,6 +61,8 @@ def grafica_pastel():
 
     # Mostrar la gráfica
     plt.show()
+
+
 
 # Llamar a las funciones para generar las gráficas
 grafica_barras()

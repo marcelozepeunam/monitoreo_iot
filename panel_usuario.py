@@ -69,6 +69,7 @@ etiqueta_hm.grid(row=0, column=0)
 etiqueta_s = Label(frame_hora, font=("digitalk", 100), text="s")
 etiqueta_s.grid(row=0, column=1, sticky="n")
 
+#!Posicionar estas 2 etiquetas más abajo 
 # Etiqueta para la fecha
 etiqueta_fecha = Label(font=("digitalk", 90), text="dia dd/mm/aaaa")
 etiqueta_fecha.pack(anchor="center")
@@ -77,6 +78,7 @@ etiqueta_fecha.pack(anchor="center")
 # Etiqueta de lectura de lectura
 etiqueta_lectura = Label(app, font=("digitalk", 90), text=f"{valor_digital} IUV: {categoria}")
 etiqueta_lectura.pack(anchor="s")
+
 
 #Invocamos la funcion
 actualiza_reloj()

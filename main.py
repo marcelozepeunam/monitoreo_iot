@@ -26,21 +26,17 @@ Este programa consiste en recibir las lecturas por medio del MQTT cada 30 segund
 dentro del programa en cada ciclo debe de guardar hora y la lectura correspondiente
 finalmente debe de almacenar en una lista las lecturas y horas recolectadas '''
 
-#Librerias 
+#LIBRERIAS
 import time 
 import os
 import statistics
-
+import paho.mqtt.client as mqtt
 
 import random
 
-#?Recuerda que estos modulos se deben de agregar justo en el lugar que queremos utilizar
-#Importando modulos 
-
-
 
 #VARIABLES Y CONSTANTES   
-num_lecturas = 60
+num_lecturas = 60 #60 seg
 errores_de_lectura = 0
 volver_inicio = True 
 pausa_entre_procesos = 1 #1 seg
@@ -49,6 +45,7 @@ pausa_resumen = 1 #1 seg
 
 
 #FUNCIONES
+#!Esta funcion debe de ser sustituida por el modulo recibe_datos.py
 #Esta funcion debe de recibir la lectura iuv del sensor 
 def recibe_lectura_esp32(lectura_iuv):
     #!Esta parte es de prueba
@@ -98,6 +95,7 @@ while num_lecturas<=60:
     
     #Filtro 1- 0>lectura_iuv<=13
     if 0>lectura_iuv<=13: #En caso de que si 
+        
         #Filtro 2- num_lecturas<=60
         if num_lecturas<=60:
             #Agregamos lectura lista

@@ -1,12 +1,12 @@
-'''Vamos a crear 60 lecturas para poder aplicar la funcion de resumen y ver si es cierto'''
+# Variable global
+global_variable = 10
 
-import random
-import time
+def modify_global_variable():
+    # Utilizamos la palabra clave 'global' para indicar que queremos modificar la variable global_variable
+    global global_variable
+    global_variable = 20
+    print("Dentro de la función:", global_variable)
 
-lecturas=[]
-
-for i in range (1,60):
-    lectura_iuv = random.randint(1, 5)
-    lecturas.append(lectura_iuv)
-
-print("Lecturas registradas: ", lecturas)
+print("Antes de llamar a la función:", global_variable)
+modify_global_variable()
+print("Después de llamar a la función:", global_variable)
