@@ -7,7 +7,8 @@ import spacy
 import pyautogui
 
 from dotenv import load_dotenv
-# from main import categoria
+
+
 
 load_dotenv()
 
@@ -18,8 +19,8 @@ def recomendacion(categoria):
     modelo = "text-davinci-002"
     prompt = f'''Actua como experto en Protección Solar.
     Dime algun dato curioso para prevenir y tener cuidado
-    ante un índice UV solar de categoria {categoria}.
-    '''  
+    ante un índice UV solar de categoria {categoria}
+    No menciones números, ni tampoco horas. '''  
 
 
     pyautogui.press('enter')
@@ -40,8 +41,9 @@ categoria = "muy alto"
 respuesta_de_recomendacion = recomendacion(categoria)
 print("\nRecomendación: ")
 print(respuesta_de_recomendacion)
-#?
-# from voz_artificial import  artificial_voice(respuesta_de_recomendacion)
+
+
+
 
 
 
