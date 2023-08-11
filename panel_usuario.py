@@ -23,8 +23,8 @@ from time import strftime
 #from main import lectura_iuv, categoria
 
 #!Valores de prueba
-valor_digital = 12
-categoria = "ALTA"
+valor_digital = 2
+categoria = "BAJA"
 
 #!Valores reales dados por el modulo main
 

@@ -1,12 +1,20 @@
 '''Pendientes
-Hacer un prompt más especifico'''
+Tecnicos:
+1- Crear un proceso en el cual se reproduzca la voz artificial en cada lectura del sensor
+2- Eliminar ese audio desués de reproducirlo para poder optimizar memoria
+3- Implementar MQTT 
+4- Hacer un prompt más especifico'''
 
 import os 
 import openai
 import spacy
 import pyautogui
 
+#?from main import categoria 
+
 from dotenv import load_dotenv
+
+
 
 
 
@@ -17,8 +25,12 @@ def recomendacion(categoria):
     openai.api_key = api_key
 
     modelo = "text-davinci-002"
+    # prompt = f'''Actua como experto en Protección Solar.
+    # Dime algun dato curioso para prevenir y tener cuidado
+    # ante un índice UV solar de categoria {categoria}
+    # No menciones numeros ni horarios '''  
     prompt = f'''Actua como experto en Protección Solar.
-    Dime algun dato curioso para prevenir y tener cuidado
+    Dime un "¿sabías qué?" corto para prevenir y tener cuidado
     ante un índice UV solar de categoria {categoria}
     No menciones numeros ni horarios '''  
 
@@ -37,7 +49,8 @@ def recomendacion(categoria):
 
 
 # Invocando a la función
-categoria = "muy alta"
+categoria = "baja" 
+#Categoria de prueba 
 respuesta_de_recomendacion = recomendacion(categoria)
 print("\nRecomendación: ")
 print(respuesta_de_recomendacion)

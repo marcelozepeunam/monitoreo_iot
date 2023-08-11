@@ -1,10 +1,8 @@
 '''Pendientes:
-0- Falta agregar correctamente la funcion que registre las lecturas 
-   en excel o el excel de ubuntu
-1- Falta crear una función que realice la conexión entre el resumen 
-   y BD
-2- Configurar gestor de BD 
-3- Programar el envío de datos a BD
+0- Buscar como interactuar desde raspberry sin vscode ya que es muy pesado para el dispositivo
+1- Terminal modulo de genera_excel.py
+2- Crear funcion de hora para ir agregando a lista en cada iteracion
+3- Agregar a listas en cada iteracion hora, categoria, lectura
 4- Implementar Docker en nuestro código
 5- Implementar docker '''
 
@@ -14,17 +12,43 @@ Para activar el entorno virtual:
 
 IMPORTANTE AGREGAR EL COMANDO PARA QUE AL ENCENDER RASPBERRY
     SE EJECUTE EL SCRIPT, VER EL SIGUIENTE VIDEO: 
-    https://www.youtube.com/watch?v=_aUXG5d2YLY&list=PLxws6VhyQsd0HPBAuLx910MJJ7bC9MMp2&index=11&ab_channel=inobotica'''
+    https://www.youtube.com/watch?v=_aUXG5d2YLY&list=PLxws6VhyQsd0HPBAuLx910MJJ7bC9MMp2&index=11&ab_channel=inobotica
+    
+    Para acceder al README En la parte superior derecha del archivo "README.md", veremos un icono 
+    llamado "Open Preview" (Abrir Vista Previa). Haz clic en él para ver cómo se verá el README 
+    formateado.'''
 
-'''Errores
-1- Me falta agregar un contador a num_lecturas
-2- Hay que solucionar el error en el modulo de graficas de matplotlib
-3- Hay que agregar los valores a las graficas '''
+'''Errores'''
 
-'''Readme 
-Este programa consiste en recibir las lecturas por medio del MQTT cada 30 segundos 
-dentro del programa en cada ciclo debe de guardar hora y la lectura correspondiente
-finalmente debe de almacenar en una lista las lecturas y horas recolectadas '''
+'''OBJETIVO
+
+Este modulo consiste en orquestar tanto la comunicación como los demás modulos.
+El programa se ejecutara siempre y cuando el numero de lecturas no sea mayor a 30 lecturas.
+Las lecturas se tomaran cada minuto, teniendo un total de 30 lecturas en total o en otras palabras
+30 minutos de monitoreo.
+
+En este proceso de monitoreo se mostrara en todo momento el modulo panel_usuario, al mismo tiempo que 
+se realizan procesos y calculos internos, además de proporcionar mediante una voz artificial con ayuda 
+de IA una recomendación basada en la lectura y/o categoria que se adquiere en ese momento. 
+El programa esta diseñado para tener una tolerancia de máximo 3 errores en la lectura adquirida por el
+sensor (ML8511), si esto llega a suceder, el programa mostrara un mensaje (mediante interfaz grafica) y 
+se suspenderá.
+
+Por el contrario, al finalizar las 30 lecturas, el programa mostrará un resumen de los datos adquiridos
+como lo son: 
+-Fecha
+-Horas registradas
+-Lecturas registradas
+-Categorias registradas
+-Lectura maxima
+-Lectura minima
+-Lectura promedio
+-Lectura moda
+
+Finalmente después de mostrar el resumen mediante gráficas, el programa se finalizara de manera automatica
+Proporcionandonos una hoja de calculo en donde se habran registrado cada monitoreo la informacion más 
+relevante como lo son:
+IUV | Categoría | Hora | Fecha | Errores de lectura '''
 
 #LIBRERIAS
 import time 
@@ -32,11 +56,11 @@ import os
 import statistics
 import paho.mqtt.client as mqtt
 
-import random
+
 
 
 #VARIABLES Y CONSTANTES   
-num_lecturas = 60 #60 seg
+num_lecturas = 30 #60 seg
 errores_de_lectura = 0
 volver_inicio = True 
 pausa_entre_procesos = 1 #1 seg
@@ -48,14 +72,8 @@ pausa_resumen = 1 #1 seg
 #!Esta funcion debe de ser sustituida por el modulo recibe_datos.py
 #Esta funcion debe de recibir la lectura iuv del sensor 
 def recibe_lectura_esp32(lectura_iuv):
-    #!Esta parte es de prueba
-    for i in range (1,60):
-        lectura_iuv = random.randint(1, 5)
-        print(lectura_iuv)
-        time.sleep(pausa_entre_procesos)
     return lectura_iuv
     
-
 
 def define_categoria(lectura_iuv):
     global categoria
@@ -79,19 +97,24 @@ def muestra_resumen():
     global lecturas_prom
     global lectura_moda
     
-    lectura_max = max(lecturas)
-    lectura_min = min(lecturas)
-    lecturas_prom = sum(lecturas) / len(lecturas)
-    lectura_moda = statistics.mode(lecturas)
+    lectura_max = max(lecturas_registradas)
+    lectura_min = min(lecturas_registradas)
+    lecturas_prom = sum(lecturas_registradas) / len(lecturas_registradas)
+    lectura_moda = statistics.mode(lecturas_registradas)
 
 
-#Código principal
-lecturas=[]
+#?Código principal
+#Colecciones donde se almacenara la informacion general
+lecturas_registradas=[]
+categorias_registradas=[]
+horas_registrados=[]
+errores_registrados=[]
+
 
 #!Creo que aqui hay error en el ciclo while 
 volver_inicio=True
 
-while num_lecturas<=60:
+while num_lecturas<=30:
     
     #Filtro 1- 0>lectura_iuv<=13
     if 0>lectura_iuv<=13: #En caso de que si 
