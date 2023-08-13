@@ -51,10 +51,14 @@ relevante como lo son:
 IUV | Categoría | Hora | Fecha | Errores de lectura '''
 
 #LIBRERIAS
+
+import datetime
 import time 
 import os
 import statistics
 import paho.mqtt.client as mqtt
+
+from time import strftime
 
 
 
@@ -71,10 +75,27 @@ pausa_resumen = 1 #1 seg
 #FUNCIONES
 #!Esta funcion debe de ser sustituida por el modulo recibe_datos.py
 #Esta funcion debe de recibir la lectura iuv del sensor 
+
+#Funcion para determinar fecha 
+def fecha_actual():
+    fecha_actual = datetime.datetime.now()
+    fecha_formateada = fecha_actual.strftime("%d / %m / %Y")
+    return fecha_formateada
+fecha_actual = fecha_actual()
+
+
+#Funcion para determinar el tiempo
+def hora_actual():
+    print(strftime("%H:%M:%S"))
+    time.sleep(1)
+    hora_actual()
+
+
+#Función para recibir la lectura desde el ESP32 por MQTT 
 def recibe_lectura_esp32(lectura_iuv):
     return lectura_iuv
     
-
+#Función que define la categoria
 def define_categoria(lectura_iuv):
     global categoria
 
@@ -89,8 +110,18 @@ def define_categoria(lectura_iuv):
     elif lectura_iuv >= 11:
         categoria = "EXTREMO"
 
+#?Hacer prueba...por terminar
+#Funcion que agrega datos a sus respectivas listas
+def agregando_a_coleccion():
+    lecturas_registradas=[]
+    categorias_registradas=[]
+    horas_registrados=[]
+    errores_registrados=[]
 
-#Esta funcion debe de adquirir los datos al finalizar todas las lecturas
+
+
+
+#Función que procesa resumen
 def muestra_resumen():
     global lectura_min
     global lectura_max
