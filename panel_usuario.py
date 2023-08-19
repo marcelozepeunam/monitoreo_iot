@@ -16,6 +16,7 @@ IUV Muy alta: color rojo intenso o morado claro
 IUV Extremadamente alta: color violeta oscuro o marrón claro'''
 
 import tkinter as tk
+import threading
 from tkinter import *
 from tkinter.ttk import *
 from time import strftime

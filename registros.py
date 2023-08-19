@@ -1,33 +1,26 @@
 '''En este archivo se enviaran las lecturas recopiladas hacia una 
 hoja de calculo en donde se guardaran los registros del proyecto'''
-
-#?import main 
-import openpyxl
+#!Hace falta probar este codigo con lecturas reales
 
 
-import openpyxl
+import pyexcel
+import main 
 
-def enviar_datos_a_excel(nombres, edades, puntajes, nombre_archivo):
-    # Crear un nuevo libro de Excel
-    workbook = openpyxl.Workbook()
 
-    # Obtener la hoja activa (por defecto)
-    sheet = workbook.active
+#Importamos las listas con los valores recopilados
+lecturas = main.lecturas_registradas
+categorias = main.categorias_registradas
+horas = main.horas_registrados
+errores = main.errores_registrados
 
-    # Agregar encabezados
-    sheet.append(["Nombre", "Edad", "Puntaje"])
+# Crear un diccionario de datos (estos serán los encabezados)
+data = {
+    "IUV": lecturas,
+    "Categorias": categorias,
+    "Horas": horas,
+    "Errores": errores
+}
 
-    # Agregar datos a la hoja
-    for nombre, edad, puntaje in zip(nombres, edades, puntajes):
-        sheet.append([nombre, edad, puntaje])
-
-    # Guardar el archivo Excel
-    workbook.save(nombre_archivo)
-
-# Datos en listas
-nombres = ["Juan", "María", "Carlos", "Laura"]
-edades = [25, 30, 28, 22]
-puntajes = [95, 85, 92, 88]
-
-# Llamar a la función para enviar datos a Excel
-enviar_datos_a_excel(nombres, edades, puntajes, "datos.xlsx")
+# Guardar los datos en un archivo de hoja de cálculo
+nombre_archivo = "datos.ods"  # Extensión .ods para hoja de cálculo Calc
+pyexcel.save_as(registros=data, ubicacion_archivo=nombre_archivo)
