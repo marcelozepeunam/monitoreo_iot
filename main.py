@@ -62,7 +62,6 @@ from time import strftime
 
 
 
-
 #VARIABLES Y CONSTANTES   
 num_lecturas = 30 #60 seg
 errores_de_lectura = 0
@@ -73,9 +72,6 @@ pausa_resumen = 1 #1 seg
 
 
 #FUNCIONES
-#!Esta funcion debe de ser sustituida por el modulo recibe_datos.py
-#Esta funcion debe de recibir la lectura iuv del sensor 
-
 #Funcion para determinar fecha 
 def fecha_actual():
     fecha_actual = datetime.datetime.now()
@@ -91,10 +87,11 @@ def hora_actual():
     hora_actual()
 
 
-#Función para recibir la lectura desde el ESP32 por MQTT 
+#Función para invocar la funcion que recibe lectura desde el ESP32 por MQTT 
 def recibe_lectura_esp32(lectura_iuv):
     return lectura_iuv
-    
+
+
 #Función que define la categoria
 def define_categoria(lectura_iuv):
     global categoria

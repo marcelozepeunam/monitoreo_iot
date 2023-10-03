@@ -6,11 +6,18 @@ del protocolo MQTT'''
 2- Mandar la variable "lectura_iuv" al modulo main
 3-Debemos crear un while para que reciba los datos n veces'''
 
+import os 
 import paho.mqtt.client as mqtt
+from dotenv import load_dotenv
 
+#Carga las variables de entorno desde el archivo .env
+load_dotenv()
+
+#Obtiene la dirección del broker MQTT desde las variables de entorno
+direccion_del_broker = os.getenv("MQTT_BROKER_IP")
+
+#!Al recibir el topic, debo enviarlo como argumento al modulo main
 def manejar_lectura_iuv(lectura_iuv):
-    # Aquí puedes realizar cualquier operación que desees con la variable "lectura_iuv"
-    # Por ejemplo, imprimir su valor o almacenarlo en una lista, base de datos, etc.
     print(f"Lectura IUV recibida: {lectura_iuv}")
 
 def on_message(client, userdata, message):
@@ -19,7 +26,8 @@ def on_message(client, userdata, message):
 
 def iniciar_servidor_mqtt():
     # Configura las credenciales para conectarse al broker MQTT
-    mqtt_broker = "direccion_del_broker"  # Cambia esto por la dirección de tu broker
+    # Usar la variable direccion_del_broker en lugar de "direccion_del_broker"
+    mqtt_broker = direccion_del_broker  # Usar la dirección obtenida del archivo .env
     mqtt_port = 1883  # Puerto predeterminado para MQTT
 
     # Crea una instancia del cliente MQTT

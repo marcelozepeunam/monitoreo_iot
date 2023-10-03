@@ -1,40 +1,28 @@
-'''Mejoras: 
-1- Crear variables globales para las recomendaciones o mandar llamar esas
-   funciones desde el archivo tesis1
-1- Aplicar condicionales para:
-   En función de las lecturas por medio de los sensores, las etiquetas
-   lectura y alerta deben de mostrarse en cierto color
-3- Al finalizar el proceso deberá mostrar las graficas a modo de reumen y después
-   de unos minutos se apagara'''
+'''Este modulo desarrollado en tkinter muestra en tiempo real con una actualizacion 
+de 60 segundos la lectura proporcionada por el sensor y con base a esa lectura
+obtiene la categoria (el color de la categoria dependera del rango de categoria en el
+que se encuentre), finalmente muestra en la interfaz grafica datos como:
+Hora, Fecha, IUV, Categoria.
+Se utilizara programación concurrente (por hilos) para ejecutar este modulo y el 
+modulo main al mismo tiempo'''
 
-'''Notas:
-Para las lecturas y alertas se recomiendan los siguientes colores:
-IUV Baja: color verde claro o amarillo pálido
-IUV Moderada: color amarillo brillante o naranja claro
-IUV Alta: color naranja oscuro o rojo claro
-IUV Muy alta: color rojo intenso o morado claro
-IUV Extremadamente alta: color violeta oscuro o marrón claro'''
 
-import tkinter as tk
 import threading
+import tkinter as tk
 from tkinter import *
 from tkinter.ttk import *
 from time import strftime
-
 #from main import lectura_iuv, categoria
 
-#!Valores de prueba
-valor_digital = 2
-categoria = "BAJA"
 
-#!Valores reales dados por el modulo main
-
-
-
+#?Ejemplo de uso (modificar con lexturas reales)
+lectura_iuv=2
+categoria="BAJA"
 
 app = tk.Tk()
 app.geometry("1920x1080")
 app.title("RELOJ DIGITAL")
+
 
 # Función que actualiza el reloj
 def actualiza_reloj():
@@ -44,21 +32,25 @@ def actualiza_reloj():
     etiqueta_s.after(1000, actualiza_reloj)
 
     # Llamamos a la función Color_categoria con el valor de ejemplo "10"
-    color_valor_digital = Color_categoria(valor_digital)
-    etiqueta_lectura.config(foreground=color_valor_digital, text=f"{valor_digital} IUV: {categoria}")
+    color_lectura_iuv = Color_categoria(lectura_iuv)
+    etiqueta_lectura.config(foreground=color_lectura_iuv, text=f"{lectura_iuv} IUV: {categoria}")
 
-# Función que devuelve el color de acuerdo al valor de valor_digital
+# Función que devuelve el color de acuerdo al valor de lectura_iuv
 def Color_categoria(valor):
+    # Define las categorías en función del valor
     if valor <= 2:
         return "green"
-    elif valor <= 3 or valor <= 5:
-        return "#FFD700"
-    elif valor <= 6 or valor <= 7:
+    elif 3 <= valor <= 5:  # Aquí corregí la estructura para tomar en cuenta el rango de valores
+        return "yellow"
+    elif 6 <= valor <= 7:
         return "orange"
-    elif valor <= 8 or valor <= 10:
+    elif 8 <= valor <= 10:
         return "red"
-    elif valor == 11 or 12: #!Verificar margen de error 
+    elif valor >= 11:
         return "purple"
+    else:
+        return "grey"  # Es bueno tener un valor por defecto en caso de que el valor no entre en ninguna de las categorías anteriores
+
 
 # Etiqueta para la Horas-Minutos
 frame_hora = Frame()
@@ -77,9 +69,8 @@ etiqueta_fecha.pack(anchor="center")
 
 
 # Etiqueta de lectura de lectura
-etiqueta_lectura = Label(app, font=("digitalk", 90), text=f"{valor_digital} IUV: {categoria}")
+etiqueta_lectura = Label(app, font=("digitalk", 90), text=f"{lectura_iuv} IUV: {categoria}")
 etiqueta_lectura.pack(anchor="s")
-
 
 #Invocamos la funcion
 actualiza_reloj()
