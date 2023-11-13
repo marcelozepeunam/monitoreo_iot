@@ -1,10 +1,7 @@
 '''Pendientes:
 0- Buscar como interactuar desde raspberry sin vscode ya que es muy pesado para el dispositivo
-1- Terminal modulo de genera_excel.py
 2- Crear funcion de hora para ir agregando a lista en cada iteracion
-3- Agregar a listas en cada iteracion hora, categoria, lectura
-4- Implementar Docker en nuestro código
-5- Implementar docker '''
+3- Agregar a listas en cada iteracion hora, categoria, lectura'''
 
 '''Notas 
 Para activar el entorno virtual:
@@ -51,27 +48,35 @@ relevante como lo son:
 IUV | Categoría | Hora | Fecha | Errores de lectura '''
 
 #LIBRERIAS
-
 import datetime
 import time 
 import os
 import statistics
-import paho.mqtt.client as mqtt
-
+#import paho.mqtt.client as mqtt
 from time import strftime
 
+#!Libreria de prueba
+import random
 
 
 #VARIABLES Y CONSTANTES   
-num_lecturas = 30 #60 seg
+num_lecturas = 0 #30 lecturas maximo
 errores_de_lectura = 0
 volver_inicio = True 
 pausa_entre_procesos = 1 #1 seg
-pausa_error = 1 #1 seg
-pausa_resumen = 1 #1 seg
+pausa_error = 1 #30 seg
+pausa_resumen = 1 #30 seg
 
 
 #FUNCIONES
+#!Funcion para simular valores de lectura_iuv 
+def lecturas_simulada():
+    lectura_iuv = random.randint(1, 13)
+    return lectura_iuv
+
+# Ejemplo de uso
+lectura_iuv_simulada = lecturas_simulada()
+print("Lectura IUV simulada:", lectura_iuv_simulada)
 #Funcion para determinar fecha 
 def fecha_actual():
     fecha_actual = datetime.datetime.now()
@@ -107,15 +112,13 @@ def define_categoria(lectura_iuv):
     elif lectura_iuv >= 11:
         categoria = "EXTREMO"
 
-#?Hacer prueba...por terminar
+
 #Funcion que agrega datos a sus respectivas listas
 def agregando_a_coleccion():
     lecturas_registradas=[]
     categorias_registradas=[]
     horas_registrados=[]
     errores_registrados=[]
-
-
 
 
 #Función que procesa resumen
@@ -131,50 +134,99 @@ def muestra_resumen():
     lectura_moda = statistics.mode(lecturas_registradas)
 
 
-#?Código principal
-#Colecciones donde se almacenara la informacion general
-lecturas_registradas=[]
-categorias_registradas=[]
-horas_registrados=[]
-errores_registrados=[]
+# #?Código principal
+# lecturas_registradas=[]
+# categorias_registradas=[]
+# horas_registrados=[]
+# errores_registrados=[]
 
 
-#!Creo que aqui hay error en el ciclo while 
-volver_inicio=True
 
-while num_lecturas<=30:
-    
-    #Filtro 1- 0>lectura_iuv<=13
-    if 0>lectura_iuv<=13: #En caso de que si 
+# #!INICIO
+# volver_inicio=True
+
+# #Filtro 1- Numero de lecturas no mayor a 30
+# while num_lecturas<=30:
+#     num_lecturas+=1 
+
+#     #Filtro 2- Lectura IUV dentro del rango [1-13 IUV]
+#     if 0>lectura_iuv<13:
         
-        #Filtro 2- num_lecturas<=60
-        if num_lecturas<=60:
-            #Agregamos lectura lista
-            lecturas.append(lectura_iuv)
-            #Agregamos un contador al numero de lecturas
-            num_lecturas+=1
-            #Realizamos una espera
-            time.sleep (pausa_entre_procesos)
+#         #Capturamos el valor IUV almacenandolo en una lista 
+#         lecturas_registradas.append(lectura_iuv)
+#         #Realizamos una espera
+#         time.sleep (pausa_entre_procesos)
 
-        else:
-            from graficas_resumen import grafica_barras
-            time.sleep(pausa_resumen)
-            from graficas_resumen import grafica_pastel
-            time.sleep(pausa_resumen)
-            break
+#     else: #En caso de que no 
+#         errores_de_lectura+=1
+
+#         if errores_de_lectura==3: #En caso de que si
+#             #Invocamos modulo de fallas tecnicas
+#             from fallas_tecnicas import fallas_tecnicas
+#             time.sleep(pausa_error)
+#             break 
+
+#         else: #En caso de que no, regresa al programa principal
+#             volver_inicio=True
 
 
-    
-    else: #En caso de que no 
-        errores_de_lectura+=1
+# #Si se completo las 30 lecturas se mostrara el resumen obtenido 
+# from graficas_resumen import grafica_barras
+# time.sleep(pausa_resumen)
+# from graficas_resumen import grafica_pastel
+# time.sleep(pausa_resumen)
 
-        if errores_de_lectura==3: #En caso de que si
-            #Invocamos modulo de fallas tecnicas
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#?Código de prueba
+lecturas_registradas = []
+categorias_registradas = []
+horas_registrados = []
+errores_registrados = []
+
+#INICIO
+volver_inicio = True
+
+# Filtro 1 - Número de lecturas no mayor a 30
+while num_lecturas <= 30:
+    num_lecturas += 1
+
+    # Genera una nueva lectura IUV simulada
+    lectura_iuv = lecturas_simulada()
+
+    # Filtro 2 - Lectura IUV dentro del rango [1-13 IUV]
+    if 0 < lectura_iuv < 13:
+        # Capturamos el valor IUV almacenándolo en una lista 
+        lecturas_registradas.append(lectura_iuv)
+        # Realizamos una espera
+        time.sleep(pausa_entre_procesos)
+    else: 
+        # En caso de que no 
+        errores_de_lectura += 1
+
+        if errores_de_lectura == 3: 
+            # Invocamos módulo de fallas técnicas
             from fallas_tecnicas import fallas_tecnicas
+            fallas_tecnicas()  # Asegúrate de llamar a la función aquí
             time.sleep(pausa_error)
             break 
+        else: 
+            # En caso de que no, regresa al programa principal
+            volver_inicio = True
 
-        else: #En caso de que no, regresa al programa principal
-            volver_inicio=True
-
-
+# Si se completaron las 30 lecturas se mostrará el resumen obtenido 
+from graficas_resumen import grafica_barras, grafica_pastel
+grafica_barras()  # Asegúrate de que estas funciones acepten los datos como argumentos o los manejen internamente
+grafica_pastel()

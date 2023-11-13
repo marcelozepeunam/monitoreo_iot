@@ -1,72 +1,61 @@
-import datetime
-import time 
-import os
-import statistics
+# '''Ejemplos de codigo de cliente y servidor para completar la comunicacion correctamente'''
+
+# #Cliente (ESP32)
+
+# #Servidor (Raspberry)
+
+# import socket
+
+# if __name__ == "__main__":
+#     # 1- Creamos el socket
+#     mi_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+#     host = socket.gethostname()  # Obtenemos el nombre del host
+
+#     # 2- Enlazamos el socket a la dirección y puerto
+#     mi_socket.bind((host, 1234))
+
+#     # 3- Escuchamos por una conexión
+#     mi_socket.listen(1)
+
+#     # Mantenemos siempre la escucha activa
+#     while True:
+#         # 4- Aceptamos la conexión
+#         conexion, direccion = mi_socket.accept()
+#         print("La conexión con {} ha sido aceptada".format(direccion))
+
+#         # 5- Recibimos los datos
+#         datos = conexion.recv(1000)
+#         print("Esto es lo que contiene la request: {}".format(datos.decode("utf-8")))
+#         print("\n")
+
+#         # 6- Enviar response
+#         respuesta = "Esto se envía desde el servidor"
+#         conexion.send(bytes(respuesta, "utf-8"))
+
+#         # Cerramos la conexión
+#         conexion.close()
+
+#     # Cerramos el socket (esto no se alcanza en el bucle infinito)
+#     mi_socket.close()
+
+
 import paho.mqtt.client as mqtt
 
-from time import strftime
- 
+# Configuración del servidor MQTT
+mqtt_server = "IP_DEL_SERVIDOR"  # Reemplaza con la dirección IP de tu Raspberry Pi
+topic = "mensaje"
 
+# Callback que se ejecuta cuando se recibe un mensaje MQTT
+def on_message(client, userdata, message):
+    print(f"Mensaje recibido en el tema '{message.topic}': {message.payload.decode()}")
 
-lecturas_registradas = []
-categorias_registradas = []
-horas_registradas = []
+# Configura el cliente MQTT
+client = mqtt.Client()
+client.on_message = on_message
+client.connect(mqtt_server, 1883, 60)
 
-procesos = 0
+# Se suscribe al tema para recibir mensajes
+client.subscribe(topic)
 
-lecturas = [1, 1, 2, 1, 2, 2, 3, 3, 1, 1]
-for lectura_iuv in lecturas: 
-
-
-    while procesos <= 10: 
-        procesos += 1
-
-
-
-        def fecha_actual():
-            fecha_actual = datetime.datetime.now()
-            fecha_formateada = fecha_actual.strftime("%d / %m / %Y")
-            return fecha_formateada
-            fecha_actual = fecha_actual()
-
-        def hora_actual():
-            return strftime("%H:%M:%S")
-
-        def define_categoria(lectura_iuv):
-                if lectura_iuv <= 2:
-                    return "BAJO"
-                elif lectura_iuv >= 3 and lectura_iuv <= 5:
-                    return "MODERADO"
-                elif lectura_iuv >= 6 and lectura_iuv <= 7:
-                    return "ALTO"
-                elif lectura_iuv >= 8 and lectura_iuv <= 10:
-                    return "MUY ALTO"
-                elif lectura_iuv >= 11:
-                    return "EXTREMO"
-
-        categoria = define_categoria(lectura_iuv)
-
-        def agregando_a_coleccion():
-                lecturas_registradas.append(lectura_iuv)
-                categorias_registradas.append(categoria)
-                horas_registradas.append(hora_actual())
-
-        print(f"\nProceso #{procesos}")
-        print("IUV:", lectura_iuv)
-        print("Categoria: ", categoria)
-        print("Hora: ", strftime("%H:%M:%S"))
-        agregando_a_coleccion()
-        time.sleep(1)
-
-# Mostrando valores recolectados
-print("\nLecturas registradas")
-print(lecturas_registradas)
-
-print("\nCategorias registradas")
-print(categorias_registradas)
-
-print("\nHoras registradas")
-print(horas_registradas)
-
-
-
+# Mantén el cliente en ejecución para recibir mensajes
+client.loop_forever()
