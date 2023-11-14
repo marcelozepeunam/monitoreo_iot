@@ -15,8 +15,6 @@ IMPORTANTE AGREGAR EL COMANDO PARA QUE AL ENCENDER RASPBERRY
     llamado "Open Preview" (Abrir Vista Previa). Haz clic en él para ver cómo se verá el README 
     formateado.'''
 
-'''Errores'''
-
 '''OBJETIVO
 
 Este modulo consiste en orquestar tanto la comunicación como los demás modulos.
@@ -47,60 +45,52 @@ Proporcionandonos una hoja de calculo en donde se habran registrado cada monitor
 relevante como lo son:
 IUV | Categoría | Hora | Fecha | Errores de lectura '''
 
-#LIBRERIAS
+
+
+
+# LIBRERIAS
 import datetime
 import time 
 import os
 import statistics
 #import paho.mqtt.client as mqtt
 from time import strftime
+import graficas_resumen
+import matplotlib.pyplot as plt
 
-#!Libreria de prueba
+# !Libreria de prueba
 import random
 
-
-#VARIABLES Y CONSTANTES   
-num_lecturas = 0 #30 lecturas maximo
-errores_de_lectura = 0
+# VARIABLES Y CONSTANTES   
 volver_inicio = True 
-pausa_entre_procesos = 1 #1 seg
-pausa_error = 1 #30 seg
-pausa_resumen = 1 #30 seg
+lecturas = 0 # Comienza desde 0 lecturas
+total_lecturas = 10 # Total de  30 lecturas
+errores_de_lectura = 0 # Comienza desde 0 errores
+pausa_entre_procesos = 3 # 1 seg
+pausa_error = 1 # 30 seg
+pausa_resumen = 1 # 30 seg
 
+# Colecciones vacías para almacenar información
+lecturas_registradas = []
+categorias_registradas = []
+horas_registradas = []
+fechas_registradas = []
 
-#FUNCIONES
-#!Funcion para simular valores de lectura_iuv 
-def lecturas_simulada():
-    lectura_iuv = random.randint(1, 13)
-    return lectura_iuv
-
-# Ejemplo de uso
-lectura_iuv_simulada = lecturas_simulada()
-print("Lectura IUV simulada:", lectura_iuv_simulada)
-#Funcion para determinar fecha 
-def fecha_actual():
+# FUNCIONES
+# Función para determinar fecha 
+def obtener_fecha_actual():
     fecha_actual = datetime.datetime.now()
     fecha_formateada = fecha_actual.strftime("%d / %m / %Y")
     return fecha_formateada
-fecha_actual = fecha_actual()
 
-
-#Funcion para determinar el tiempo
+# Función para determinar el tiempo
 def hora_actual():
     print(strftime("%H:%M:%S"))
     time.sleep(1)
-    hora_actual()
 
-
-#Función para invocar la funcion que recibe lectura desde el ESP32 por MQTT 
-def recibe_lectura_esp32(lectura_iuv):
-    return lectura_iuv
-
-
-#Función que define la categoria
+# Función que define la categoría
 def define_categoria(lectura_iuv):
     global categoria
-
     if lectura_iuv <= 2:
         categoria = "BAJO"
     elif lectura_iuv >= 3 and lectura_iuv <= 5:
@@ -112,16 +102,17 @@ def define_categoria(lectura_iuv):
     elif lectura_iuv >= 11:
         categoria = "EXTREMO"
 
+# Función que agrega datos a sus respectivas listas
+def agregando_a_coleccion(lectura_iuv, categoria):
+    fecha = obtener_fecha_actual()  # Llama a la función para obtener la fecha
+    hora = strftime("%H:%M:%S")  # Obtiene la hora actual
 
-#Funcion que agrega datos a sus respectivas listas
-def agregando_a_coleccion():
-    lecturas_registradas=[]
-    categorias_registradas=[]
-    horas_registrados=[]
-    errores_registrados=[]
+    lecturas_registradas.append(lectura_iuv)
+    categorias_registradas.append(categoria)
+    horas_registradas.append(hora)
+    fechas_registradas.append(fecha)
 
-
-#Función que procesa resumen
+# Función que procesa resumen
 def muestra_resumen():
     global lectura_min
     global lectura_max
@@ -133,85 +124,30 @@ def muestra_resumen():
     lecturas_prom = sum(lecturas_registradas) / len(lecturas_registradas)
     lectura_moda = statistics.mode(lecturas_registradas)
 
-
-# #?Código principal
-# lecturas_registradas=[]
-# categorias_registradas=[]
-# horas_registrados=[]
-# errores_registrados=[]
-
-
-
-# #!INICIO
-# volver_inicio=True
-
-# #Filtro 1- Numero de lecturas no mayor a 30
-# while num_lecturas<=30:
-#     num_lecturas+=1 
-
-#     #Filtro 2- Lectura IUV dentro del rango [1-13 IUV]
-#     if 0>lectura_iuv<13:
-        
-#         #Capturamos el valor IUV almacenandolo en una lista 
-#         lecturas_registradas.append(lectura_iuv)
-#         #Realizamos una espera
-#         time.sleep (pausa_entre_procesos)
-
-#     else: #En caso de que no 
-#         errores_de_lectura+=1
-
-#         if errores_de_lectura==3: #En caso de que si
-#             #Invocamos modulo de fallas tecnicas
-#             from fallas_tecnicas import fallas_tecnicas
-#             time.sleep(pausa_error)
-#             break 
-
-#         else: #En caso de que no, regresa al programa principal
-#             volver_inicio=True
-
-
-# #Si se completo las 30 lecturas se mostrara el resumen obtenido 
-# from graficas_resumen import grafica_barras
-# time.sleep(pausa_resumen)
-# from graficas_resumen import grafica_pastel
-# time.sleep(pausa_resumen)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#?Código de prueba
-lecturas_registradas = []
-categorias_registradas = []
-horas_registrados = []
-errores_registrados = []
-
-#INICIO
+# !INICIO del código principal
 volver_inicio = True
 
 # Filtro 1 - Número de lecturas no mayor a 30
-while num_lecturas <= 30:
-    num_lecturas += 1
+while lecturas <= total_lecturas-1:
+    lecturas += 1 
 
-    # Genera una nueva lectura IUV simulada
-    lectura_iuv = lecturas_simulada()
+    # Generar un nuevo valor para lectura_iuv
+    lectura_iuv = random.randint(15, 15)
 
     # Filtro 2 - Lectura IUV dentro del rango [1-13 IUV]
-    if 0 < lectura_iuv < 13:
-        # Capturamos el valor IUV almacenándolo en una lista 
-        lecturas_registradas.append(lectura_iuv)
+    if 1 <= lectura_iuv <= 13:
+        
+        # !Agregamos valores a colecciones en cada lectura
+        obtener_fecha_actual()
+        define_categoria(lectura_iuv)
+        agregando_a_coleccion(lectura_iuv, categoria)  # Solo dos argumentos
+
+        # Imprimir los valores registrados en este paso
+        print([lectura_iuv, categoria, horas_registradas[-1], fechas_registradas[-1]])
+
         # Realizamos una espera
         time.sleep(pausa_entre_procesos)
+
     else: 
         # En caso de que no 
         errores_de_lectura += 1
@@ -219,14 +155,25 @@ while num_lecturas <= 30:
         if errores_de_lectura == 3: 
             # Invocamos módulo de fallas técnicas
             from fallas_tecnicas import fallas_tecnicas
-            fallas_tecnicas()  # Asegúrate de llamar a la función aquí
             time.sleep(pausa_error)
             break 
+
         else: 
             # En caso de que no, regresa al programa principal
-            volver_inicio = True
+            volver_inicio=True
 
-# Si se completaron las 30 lecturas se mostrará el resumen obtenido 
-from graficas_resumen import grafica_barras, grafica_pastel
-grafica_barras()  # Asegúrate de que estas funciones acepten los datos como argumentos o los manejen internamente
-grafica_pastel()
+
+if lecturas >= total_lecturas:
+    muestra_resumen()  
+
+    #Incova a grafica de barras
+    graficas_resumen.grafica_barras(horas_registradas, lecturas_registradas)
+    plt.pause(pausa_entre_procesos)  
+    plt.close('all')
+
+    #Invoca a grafica de pastel
+    graficas_resumen.grafica_pastel(lecturas_prom, lectura_min, lectura_max, lectura_moda)
+    plt.pause(pausa_entre_procesos) 
+    plt.close('all')
+
+

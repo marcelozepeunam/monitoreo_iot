@@ -8,71 +8,11 @@
    hora de iuv min'''
 
 
-
-
-# import matplotlib.pyplot as plt
-# import numpy as np
-
-# def grafica_barras():
-#     # Datos para la gráfica de barras
-#     horarios = ["08:00", "10:00", "12:00", "14:00", "16:00"] * 12
-#     iuv = [1,2,2,3,1] * 12
-
-#     print("Elementos de horarios: ", len(horarios))
-#     print("Elementos de iuv: ", len(iuv))
-
-#     # Generar índices numéricos para el eje x usando np.arange()
-#     indices = np.arange(len(horarios))
-
-#     # Crear la gráfica de barras
-#     plt.bar(indices, iuv, color='blue')
-
-#     # Agregar etiquetas y título
-#     plt.xticks(indices, horarios, rotation=45)
-#     plt.xlabel("Horarios de lectura")
-#     plt.ylabel("Índices ultravioletas")
-#     plt.title("Índice Ultravioleta por Horario")
-
-#     # Mostrar la gráfica
-#     plt.show()
-
-
-
-
-# def grafica_pastel():
-#     # Datos de ejemplo para la gráfica de pastel
-#     iuv_promedio = 7.5
-#     iuv_minima = 4
-#     iuv_maxima = 9
-#     iuv_moda = 9
-
-#     # Crear la gráfica de pastel
-#     etiquetas = ["IUV PROMEDIO", "IUV MINIMA", "IUV MAXIMA", "IUV MODA"]
-#     valores = [iuv_promedio, iuv_minima, iuv_maxima, iuv_moda]
-#     colores = ['yellowgreen', 'lightcoral', 'lightskyblue', 'yellow']  # Amarillo para IUV MODA
-
-#     plt.pie(valores, labels=etiquetas, colors=colores, autopct='%1.1f%%', startangle=140)
-
-#     # Agregar título
-#     plt.title("Índice Ultravioleta\n\n")
-
-#     # Ajustar el aspecto del círculo para que se vea como pastel y no elipse
-#     plt.axis('equal')
-
-#     # Mostrar la gráfica
-#     plt.show()
-
-
-
-# # Llamar a las funciones para generar las gráficas
-# grafica_barras()
-# grafica_pastel()
-
-
-
 import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib
+import time
+
 
 def maximizar_ventana():
     mng = plt.get_current_fig_manager()
@@ -80,27 +20,21 @@ def maximizar_ventana():
         mng.window.state('zoomed')  # Para Tkinter
     # Aquí puedes agregar condiciones para otros backends si es necesario
 
-def grafica_barras():
-    # Crear la gráfica de barras
+def grafica_barras(horas_registradas, lecturas_registradas):
+    # Crear la gráfica de barras utilizando horas_registrados y lecturas_registradas
     plt.figure(figsize=(19.2, 10.8))
-    horarios = ["08:00", "10:00", "12:00", "14:00", "16:00"] * 12
-    iuv = [1, 2, 2, 3, 1] * 12
-    indices = np.arange(len(horarios))
-    plt.bar(indices, iuv, color='blue')
-    plt.xticks(indices, horarios, rotation=45)
+    indices = np.arange(len(horas_registradas))
+    plt.bar(indices, lecturas_registradas, color='blue')
+    plt.xticks(indices, horas_registradas, rotation=45)
     plt.xlabel("Horarios de lectura")
     plt.ylabel("Índices ultravioletas")
     plt.title("Índice Ultravioleta por Horario")
     maximizar_ventana()
     plt.show()
 
-def grafica_pastel():
-    # Crear la gráfica de pastel
+def grafica_pastel(iuv_promedio, iuv_minima, iuv_maxima, iuv_moda):
+    # Crear la gráfica de pastel utilizando los valores proporcionados
     plt.figure(figsize=(19.2, 10.8))
-    iuv_promedio = 7.5
-    iuv_minima = 4
-    iuv_maxima = 9
-    iuv_moda = 9
     etiquetas = ["IUV PROMEDIO", "IUV MINIMA", "IUV MAXIMA", "IUV MODA"]
     valores = [iuv_promedio, iuv_minima, iuv_maxima, iuv_moda]
     colores = ['yellowgreen', 'lightcoral', 'lightskyblue', 'yellow']
@@ -110,5 +44,6 @@ def grafica_pastel():
     maximizar_ventana()
     plt.show()
 
-grafica_barras()
-grafica_pastel()
+#?Ejemplo de uso
+# grafica_barras()
+# grafica_pastel()
