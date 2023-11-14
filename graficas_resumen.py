@@ -7,6 +7,10 @@
    promedio, iuv_max, iuv_min, hora de iuv max
    hora de iuv min'''
 
+#!Este modulo aún contiene 1 error:
+#Al mostrar las graficas de resumen no se cierra la ventana automaticamente 
+
+
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -31,6 +35,7 @@ def grafica_barras(horas_registradas, lecturas_registradas):
     plt.title("Índice Ultravioleta por Horario")
     maximizar_ventana()
     plt.show()
+  
 
 def grafica_pastel(iuv_promedio, iuv_minima, iuv_maxima, iuv_moda):
     # Crear la gráfica de pastel utilizando los valores proporcionados

@@ -45,9 +45,6 @@ Proporcionandonos una hoja de calculo en donde se habran registrado cada monitor
 relevante como lo son:
 IUV | Categoría | Hora | Fecha | Errores de lectura '''
 
-
-
-
 # LIBRERIAS
 import datetime
 import time 
@@ -131,13 +128,13 @@ volver_inicio = True
 while lecturas <= total_lecturas-1:
     lecturas += 1 
 
+    #!Codigo de prueba
     # Generar un nuevo valor para lectura_iuv
-    lectura_iuv = random.randint(15, 15)
+    lectura_iuv = random.randint(1, 13)
 
     # Filtro 2 - Lectura IUV dentro del rango [1-13 IUV]
     if 1 <= lectura_iuv <= 13:
         
-        # !Agregamos valores a colecciones en cada lectura
         obtener_fecha_actual()
         define_categoria(lectura_iuv)
         agregando_a_coleccion(lectura_iuv, categoria)  # Solo dos argumentos

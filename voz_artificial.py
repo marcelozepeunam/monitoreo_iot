@@ -9,9 +9,10 @@ import pygame
 import tempfile
 import os
 
-from dotenv import load_dotenv
 
+from dotenv import load_dotenv
 from recomendaciones import *
+
 
 
 load_dotenv()
