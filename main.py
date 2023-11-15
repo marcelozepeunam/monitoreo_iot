@@ -54,6 +54,7 @@ import statistics
 import graficas_resumen
 import matplotlib.pyplot as plt
 import queue
+
 import threading #Libreria para utilizar hilos 
 import panel_usuario #Hilo 1
 import voz_artificial #Hilo 2
