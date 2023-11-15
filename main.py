@@ -51,9 +51,14 @@ import time
 import os
 import statistics
 #import paho.mqtt.client as mqtt
-from time import strftime
 import graficas_resumen
 import matplotlib.pyplot as plt
+import queue
+import threading #Libreria para utilizar hilos 
+import panel_usuario #Hilo 1
+import voz_artificial #Hilo 2
+from time import strftime
+
 
 # !Libreria de prueba
 import random
@@ -61,11 +66,14 @@ import random
 # VARIABLES Y CONSTANTES   
 volver_inicio = True 
 lecturas = 0 # Comienza desde 0 lecturas
-total_lecturas = 10 # Total de  30 lecturas
+total_lecturas = 4 # Total de  30 lecturas
 errores_de_lectura = 0 # Comienza desde 0 errores
-pausa_entre_procesos = 3 # 1 seg
-pausa_error = 1 # 30 seg
-pausa_resumen = 1 # 30 seg
+pausa_entre_procesos = 60 # 1 seg
+pausa_error = 10 # 30 seg
+pausa_resumen = 10 # 30 seg
+
+#Creando instancia de la cola 
+data_queue = queue.Queue()
 
 # Colecciones vacías para almacenar información
 lecturas_registradas = []
@@ -121,56 +129,86 @@ def muestra_resumen():
     lecturas_prom = sum(lecturas_registradas) / len(lecturas_registradas)
     lectura_moda = statistics.mode(lecturas_registradas)
 
-# !INICIO del código principal
-volver_inicio = True
+#!Funcion del programa principal con hilos (panel_usuario y voz_artificial)
+def main():
+    # Hilo dedicado para panel_usuario 
+    hilo_panel_usuario = threading.Thread(target=panel_usuario.iniciar_interfaz_usuario, args=(data_queue,))
+    hilo_panel_usuario.start()
 
-# Filtro 1 - Número de lecturas no mayor a 30
-while lecturas <= total_lecturas-1:
-    lecturas += 1 
+    # Hilo dedicado para voz_artificial
+    hilo_voz_artificial = threading.Thread(target=voz_artificial.funcion_principal_voz, args=(data_queue,))
+    hilo_voz_artificial.start()
 
-    #!Codigo de prueba
-    # Generar un nuevo valor para lectura_iuv
-    lectura_iuv = random.randint(1, 13)
 
-    # Filtro 2 - Lectura IUV dentro del rango [1-13 IUV]
-    if 1 <= lectura_iuv <= 13:
-        
-        obtener_fecha_actual()
-        define_categoria(lectura_iuv)
-        agregando_a_coleccion(lectura_iuv, categoria)  # Solo dos argumentos
+    volver_inicio = True
 
-        # Imprimir los valores registrados en este paso
-        print([lectura_iuv, categoria, horas_registradas[-1], fechas_registradas[-1]])
+    # Filtro 1 - Número de lecturas no mayor a 30
+    while lecturas <= total_lecturas-1:
+        lecturas += 1 
 
-        # Realizamos una espera
-        time.sleep(pausa_entre_procesos)
+        #!Codigo de prueba
+        # Generar un nuevo valor para lectura_iuv
+        lectura_iuv = random.randint(1, 13)
 
-    else: 
-        # En caso de que no 
-        errores_de_lectura += 1
 
-        if errores_de_lectura == 3: 
-            # Invocamos módulo de fallas técnicas
-            from fallas_tecnicas import fallas_tecnicas
-            time.sleep(pausa_error)
-            break 
+        # Filtro 2 - Lectura IUV dentro del rango [1-13 IUV]
+        if 1 <= lectura_iuv <= 13:
+            
+            obtener_fecha_actual()
+            define_categoria(lectura_iuv)
+            agregando_a_coleccion(lectura_iuv, categoria)  # Solo dos argumentos
+
+            # Imprimir los valores registrados en este paso
+            print([lectura_iuv, categoria, horas_registradas[-1], fechas_registradas[-1]])
+
+            # Realizamos una espera
+            time.sleep(pausa_entre_procesos)
 
         else: 
-            # En caso de que no, regresa al programa principal
-            volver_inicio=True
+            # En caso de que no 
+            errores_de_lectura += 1
+
+            if errores_de_lectura == 3: 
+                # Invocamos módulo de fallas técnicas
+                from fallas_tecnicas import fallas_tecnicas
+                time.sleep(pausa_error)
+                break 
+
+            else: 
+                # En caso de que no, regresa al programa principal
+                time.sleep(pausa_entre_procesos)
+                volver_inicio=True
 
 
-if lecturas >= total_lecturas:
-    muestra_resumen()  
+        if lecturas >= total_lecturas:
+            muestra_resumen()  
 
-    #Incova a grafica de barras
-    graficas_resumen.grafica_barras(horas_registradas, lecturas_registradas)
-    plt.pause(pausa_entre_procesos)  
-    plt.close('all')
+            #!Error en las graficas, ya que no cierran automaticamente 
+            #Incova a grafica de barras
+            graficas_resumen.grafica_barras(horas_registradas, lecturas_registradas)
+            plt.pause(pausa_entre_procesos)  
+            plt.close('all')
 
-    #Invoca a grafica de pastel
-    graficas_resumen.grafica_pastel(lecturas_prom, lectura_min, lectura_max, lectura_moda)
-    plt.pause(pausa_entre_procesos) 
-    plt.close('all')
+            #Invoca a grafica de pastel
+            graficas_resumen.grafica_pastel(lecturas_prom, lectura_min, lectura_max, lectura_moda)
+            plt.pause(pausa_entre_procesos) 
+            plt.close('all')
+
+
+    # Esperar a que los hilos terminen
+    hilo_panel_usuario.join()
+    hilo_voz_artificial.join()
+
+if __name__ == "__main__":
+    main()
+
+
+
+
+
+
+
+
+
 
 
