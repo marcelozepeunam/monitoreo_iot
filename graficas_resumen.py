@@ -1,4 +1,4 @@
-#!Pendiente
+#Modulo graficas_resumen
 
 '''En este modulo se realizaran 2 funciones
    La primera funcion mostrará las graficas de las 

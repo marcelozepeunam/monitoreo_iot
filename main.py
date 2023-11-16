@@ -45,6 +45,12 @@ Proporcionandonos una hoja de calculo en donde se habran registrado cada monitor
 relevante como lo son:
 IUV | Categoría | Hora | Fecha | Errores de lectura '''
 
+#Modulo main 
+'''Este modulo es el orquestador de los demas modulos, su principal funcion es 
+realizar una serie de procesos como calculos, mandar a llamar algunas variables importantes
+para el funcionamiento correcto, enviar variables a otros modulos que dependen de la informacion
+que se genere en este modulo'''
+
 # LIBRERIAS
 import datetime
 import time 

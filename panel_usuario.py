@@ -1,3 +1,5 @@
+#Modulo panel_usuario
+
 '''Este modulo desarrollado en tkinter muestra en tiempo real con una actualizacion 
 de 60 segundos la lectura proporcionada por el sensor y con base a esa lectura
 obtiene la categoria (el color de la categoria dependera del rango de categoria en el
@@ -5,7 +7,6 @@ que se encuentre), finalmente muestra en la interfaz grafica datos como:
 Hora, Fecha, IUV, Categoria.
 Se utilizara programación concurrente (por hilos) para ejecutar este modulo y el 
 modulo main al mismo tiempo'''
-
 
 import tkinter as tk
 from tkinter import *

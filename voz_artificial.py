@@ -15,7 +15,6 @@ def voz_artificial():
 
     # Url de la voz clonada 
     url = f"https://api.elevenlabs.io/v1/text-to-speech/WMM564fNSAHcr9RrpzG7"
-    # url = f"https://api.elevenlabs.io/v1/voices/WMM564fNSAHcr9RrpzG7"
 
     # Obtener la clave API de ElevenLabs desde el archivo .env
     XI_API_KEY = os.getenv("ELEVEN_API_KEY")

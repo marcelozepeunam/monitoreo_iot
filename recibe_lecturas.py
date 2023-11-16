@@ -1,4 +1,8 @@
-'''El servidor se configuró para que este a la escucha continuamente'''
+#Modulo recibe_lecturas
+
+'''Este modulo es el encargado de recibir las lecturas (topic) por medio del
+protocolo MQTT.
+El servidor se configuró para que este a la escucha continuamente'''
 
 import paho.mqtt.client as mqtt
 
