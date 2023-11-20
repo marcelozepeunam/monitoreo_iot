@@ -1,5 +1,3 @@
-#Modulo graficas_resumen
-
 '''En este modulo se realizaran 2 funciones
    La primera funcion mostrará las graficas de las 
    lecturas con una grafica de barras (x:horas, y:IUV), 
@@ -11,6 +9,7 @@
 #Al mostrar las graficas de resumen no se cierra la ventana automaticamente 
 
 
+#Modulo graficas_resumen
 
 import matplotlib.pyplot as plt
 import numpy as np

@@ -1,10 +1,9 @@
-#Modulo recomendaciones.py 
-
 '''Este modulo genera una recomendacion a traves de la API de openai, esta recomendacion es creada 
 con base a los datos de lectura_iuv (lectura del sensor) y categoria.
 Se utilizo una tecnica de prompt engineer llamada few-shots la cual le muestra algunos ejemplos de 
 como se desea el resultado, de esta forma se evitan alucionaciones de GPT-4'''
 
+#Modulo recomendaciones.py 
 
 import os 
 import openai
@@ -38,7 +37,7 @@ def recomendacion(lectura_iuv, categoria):
     Evita la exposición solar entre las 10 a.m. y las 4 p.m. si es posible. ¡Protege tu piel y disfruta del día de forma segura!"
 
 
-    Ejemplo 3 de output: Alerta Crítica: El Índice Ultravioleta (IUV) actual es de 11, lo cual se encuentra en la categoría 'Extremadamente 
+    Ejemplo 3 de output: ¡Alerta Crítica! El Índice Ultravioleta (IUV) actual es de 11, lo cual se encuentra en la categoría 'Extremadamente 
     Alta'. Este nivel representa un riesgo muy serio de daño por la exposición al sol. Es esencial tomar medidas de protección exhaustivas. 
     Usa un protector solar con un factor de protección solar (FPS) de 50 o más, viste ropa de manga larga, pantalones y sombrero de ala ancha.
     Las gafas de sol deben ofrecer protección completa contra los rayos UVA y UVB. Limita al máximo la exposición directa al sol, 

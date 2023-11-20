@@ -1,8 +1,3 @@
-'''Pendientes:
-0- Buscar como interactuar desde raspberry sin vscode ya que es muy pesado para el dispositivo
-2- Crear funcion de hora para ir agregando a lista en cada iteracion
-3- Agregar a listas en cada iteracion hora, categoria, lectura'''
-
 '''Notas 
 Para activar el entorno virtual:
 1- tesis_env\Scripts\activate
@@ -15,41 +10,8 @@ IMPORTANTE AGREGAR EL COMANDO PARA QUE AL ENCENDER RASPBERRY
     llamado "Open Preview" (Abrir Vista Previa). Haz clic en él para ver cómo se verá el README 
     formateado.'''
 
-'''OBJETIVO
-
-Este modulo consiste en orquestar tanto la comunicación como los demás modulos.
-El programa se ejecutara siempre y cuando el numero de lecturas no sea mayor a 30 lecturas.
-Las lecturas se tomaran cada minuto, teniendo un total de 30 lecturas en total o en otras palabras
-30 minutos de monitoreo.
-
-En este proceso de monitoreo se mostrara en todo momento el modulo panel_usuario, al mismo tiempo que 
-se realizan procesos y calculos internos, además de proporcionar mediante una voz artificial con ayuda 
-de IA una recomendación basada en la lectura y/o categoria que se adquiere en ese momento. 
-El programa esta diseñado para tener una tolerancia de máximo 3 errores en la lectura adquirida por el
-sensor (ML8511), si esto llega a suceder, el programa mostrara un mensaje (mediante interfaz grafica) y 
-se suspenderá.
-
-Por el contrario, al finalizar las 30 lecturas, el programa mostrará un resumen de los datos adquiridos
-como lo son: 
--Fecha
--Horas registradas
--Lecturas registradas
--Categorias registradas
--Lectura maxima
--Lectura minima
--Lectura promedio
--Lectura moda
-
-Finalmente después de mostrar el resumen mediante gráficas, el programa se finalizara de manera automatica
-Proporcionandonos una hoja de calculo en donde se habran registrado cada monitoreo la informacion más 
-relevante como lo son:
-IUV | Categoría | Hora | Fecha | Errores de lectura '''
 
 #Modulo main 
-'''Este modulo es el orquestador de los demas modulos, su principal funcion es 
-realizar una serie de procesos como calculos, mandar a llamar algunas variables importantes
-para el funcionamiento correcto, enviar variables a otros modulos que dependen de la informacion
-que se genere en este modulo'''
 
 # LIBRERIAS
 import datetime

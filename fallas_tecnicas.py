@@ -1,7 +1,8 @@
-#Modulo fallas tecnicas
-
 '''Este modulo tiene como objetivo mostrar un mensaje por medio de una interfaz grafica
 cuando se presento un error en la logica principal'''
+
+
+#Modulo fallas tecnicas
 
 import tkinter  
 import tkinter  as tk
