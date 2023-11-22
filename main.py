@@ -21,8 +21,8 @@ import statistics
 #import paho.mqtt.client as mqtt
 import graficas_resumen
 import matplotlib.pyplot as plt
-import queue
 
+import queue
 import threading #Libreria para utilizar hilos 
 import panel_usuario #Hilo 1
 import voz_artificial #Hilo 2
@@ -41,6 +41,7 @@ pausa_entre_procesos = 60 # 1 seg
 pausa_error = 10 # 30 seg
 pausa_resumen = 10 # 30 seg
 
+
 #Creando instancia de la cola 
 data_queue = queue.Queue()
 
@@ -49,6 +50,14 @@ lecturas_registradas = []
 categorias_registradas = []
 horas_registradas = []
 fechas_registradas = []
+
+# Creación de los hilos panel_usuario y voz_artificial
+hilo_panel_usuario = threading.Thread(target=panel_usuario.iniciar_interfaz_usuario, args=(data_queue,))
+hilo_voz_artificial = threading.Thread(target=voz_artificial.voz_artificial, args=(data_queue,))
+
+# Inicia los hilos
+hilo_panel_usuario.start()
+hilo_voz_artificial.start()
 
 # FUNCIONES
 # Función para determinar fecha 
@@ -100,12 +109,15 @@ def muestra_resumen():
 
 #!Funcion del programa principal con hilos (panel_usuario y voz_artificial)
 def main():
+
+    global lecturas
+
     # Hilo dedicado para panel_usuario 
     hilo_panel_usuario = threading.Thread(target=panel_usuario.iniciar_interfaz_usuario, args=(data_queue,))
     hilo_panel_usuario.start()
 
     # Hilo dedicado para voz_artificial
-    hilo_voz_artificial = threading.Thread(target=voz_artificial.funcion_principal_voz, args=(data_queue,))
+    hilo_voz_artificial = threading.Thread(target=voz_artificial.voz_artificial, args=(data_queue,))
     hilo_voz_artificial.start()
 
 
@@ -126,6 +138,7 @@ def main():
             obtener_fecha_actual()
             define_categoria(lectura_iuv)
             agregando_a_coleccion(lectura_iuv, categoria)  # Solo dos argumentos
+            data_queue.put((lectura_iuv, categoria))
 
             # Imprimir los valores registrados en este paso
             print([lectura_iuv, categoria, horas_registradas[-1], fechas_registradas[-1]])
