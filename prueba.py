@@ -1,10 +1,3 @@
-'''Este modulo genera una recomendacion a traves de la API de openai, esta recomendacion es creada 
-con base a los datos de lectura_iuv (lectura del sensor) y categoria.
-Se utilizo una tecnica de prompt engineer llamada few-shots la cual le muestra algunos ejemplos de 
-como se desea el resultado, de esta forma se evitan alucionaciones de GPT-4'''
-
-#Modulo voz_artificial
-
 
 import requests
 from dotenv import load_dotenv
@@ -12,11 +5,9 @@ import os
 import pygame
 import time
 
-from recomendaciones import respuesta_de_recomendacion
-
 load_dotenv()
 
-def genera_voz_artificial():
+def genera_y_reproduce_voz_artificial():
     CHUNK_SIZE = 1024
     url = "https://api.elevenlabs.io/v1/text-to-speech/Cx2aqI2o6jdvuuXrogYa"
     XI_API_KEY = os.getenv("ELEVEN_API_KEY")
@@ -28,7 +19,7 @@ def genera_voz_artificial():
     }
 
     data = {
-        "text": respuesta_de_recomendacion,
+        "text": "Hola este es un audio de prueba",
         "model_id": "eleven_multilingual_v2",
         "voice_settings": {
             "stability": 0.5,
@@ -59,5 +50,5 @@ def genera_voz_artificial():
         # Eliminar el archivo después de la reproducción
         os.remove(audio_file)
 
-genera_voz_artificial()
+genera_y_reproduce_voz_artificial()
 
