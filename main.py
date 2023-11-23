@@ -19,13 +19,15 @@ import time
 import os
 import statistics
 #import paho.mqtt.client as mqtt
+
 import graficas_resumen
 import matplotlib.pyplot as plt
 
 import queue
 import threading #Libreria para utilizar hilos 
-import panel_usuario #Hilo 1
-import voz_artificial #Hilo 2
+from voz_artificial import generar_voz_artificial
+import panel_usuario
+from threading import Thread
 from time import strftime
 
 
@@ -35,7 +37,7 @@ import random
 # VARIABLES Y CONSTANTES   
 volver_inicio = True 
 lecturas = 0 # Comienza desde 0 lecturas
-total_lecturas = 4 # Total de  30 lecturas
+total_lecturas = 2 # Total de  30 lecturas
 errores_de_lectura = 0 # Comienza desde 0 errores
 pausa_entre_procesos = 60 # 1 seg
 pausa_error = 10 # 30 seg
@@ -51,13 +53,6 @@ categorias_registradas = []
 horas_registradas = []
 fechas_registradas = []
 
-# Creación de los hilos panel_usuario y voz_artificial
-hilo_panel_usuario = threading.Thread(target=panel_usuario.iniciar_interfaz_usuario, args=(data_queue,))
-hilo_voz_artificial = threading.Thread(target=voz_artificial.voz_artificial, args=(data_queue,))
-
-# Inicia los hilos
-hilo_panel_usuario.start()
-hilo_voz_artificial.start()
 
 # FUNCIONES
 # Función para determinar fecha 
@@ -117,7 +112,7 @@ def main():
     hilo_panel_usuario.start()
 
     # Hilo dedicado para voz_artificial
-    hilo_voz_artificial = threading.Thread(target=voz_artificial.voz_artificial, args=(data_queue,))
+    hilo_voz_artificial = threading.Thread(target=generar_voz_artificial, args=(data_queue,))
     hilo_voz_artificial.start()
 
 

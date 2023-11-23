@@ -37,7 +37,7 @@ def iniciar_interfaz_usuario(data_queue):
     # Función que actualiza la interfaz de usuario
     def actualizar_interfaz():
         color_lectura_iuv = Color_categoria(lectura_iuv)
-        etiqueta_lectura.config(foreground=color_lectura_iuv, text=f"{lectura_iuv} IUV: {categoria}")
+        etiqueta_lectura.config(foreground=color_lectura_iuv, text=f"\n{lectura_iuv} IUV: {categoria}")
 
     # Función que devuelve el color de acuerdo al valor de lectura_iuv
     def Color_categoria(valor):
@@ -85,7 +85,7 @@ def iniciar_interfaz_usuario(data_queue):
     etiqueta_fecha = Label(font=("digitalk", 80), text="dia dd/mm/aaaa")
     etiqueta_fecha.pack(anchor="center")
 
-    etiqueta_lectura = Label(app, font=("digitalk", 90), text=f"{lectura_iuv} IUV: {categoria}")
+    etiqueta_lectura = Label(app, font=("digitalk", 90), text=f"\n{lectura_iuv} IUV: {categoria}")
     etiqueta_lectura.pack(anchor="s")
 
     # Inicia el reloj y la simulación de datos

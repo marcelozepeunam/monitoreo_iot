@@ -55,11 +55,11 @@ def recomendacion(lectura_iuv, categoria):
     respuesta_de_recomendacion = respuesta.choices[0].message['content'].strip()
     return respuesta_de_recomendacion
 
-#Ejemplo de uso
-lectura_iuv = 1
-categoria = "baja" 
-respuesta_de_recomendacion = recomendacion(lectura_iuv, categoria)
-print("\nRecomendación: ")
-print(respuesta_de_recomendacion)
+# #Ejemplo de uso
+# lectura_iuv = 1
+# categoria = "baja" 
+# respuesta_de_recomendacion = recomendacion(lectura_iuv, categoria)
+# print("\nRecomendación: ")
+# print(respuesta_de_recomendacion)
 
 

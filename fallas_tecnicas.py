@@ -4,10 +4,9 @@ cuando se presento un error en la logica principal'''
 
 #Modulo fallas tecnicas
 
-import tkinter  
+
 import tkinter  as tk
-from tkinter import *
-from tkinter.ttk import *
+from tkinter import Label
 
 
 def fallas_tecnicas():
@@ -22,11 +21,9 @@ def fallas_tecnicas():
 
     #Crear etiquetas
     etiqueta1 = tk.Label(ventana, text="EN MANTENIMIENTO", font=("Arial", 80))
-
     etiqueta2 = tk.Label(ventana, text='''\nDisculpe las molestias ocasionadas, 
     estamos trabajando para solucionar 
     la falla técnica lo antes posible.''', font=("Arial", 40))
-
     etiqueta3 = tk.Label(ventana, text="Contacto: marcelozepeda47@aragon.unam.mx", font=("Arial", 30))
     #etiqueta3 = tk.Label(ventana, text="\n\nContacto: marcelozepeda47@aragon.unam.mx", font=("Arial", 40))
 
