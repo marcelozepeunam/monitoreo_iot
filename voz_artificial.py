@@ -7,16 +7,15 @@ como se desea el resultado, de esta forma se evitan alucionaciones de GPT-4'''
 
 
 import requests
-from dotenv import load_dotenv
 import os
 import pygame
 import time
+from dotenv import load_dotenv
 
-from recomendaciones import respuesta_de_recomendacion
 
 load_dotenv()
 
-def genera_voz_artificial():
+def genera_voz_artificial(data_queue):
     CHUNK_SIZE = 1024
     url = "https://api.elevenlabs.io/v1/text-to-speech/Cx2aqI2o6jdvuuXrogYa"
     XI_API_KEY = os.getenv("ELEVEN_API_KEY")
@@ -27,37 +26,41 @@ def genera_voz_artificial():
         "xi-api-key": XI_API_KEY
     }
 
-    data = {
-        "text": respuesta_de_recomendacion,
-        "model_id": "eleven_multilingual_v2",
-        "voice_settings": {
-            "stability": 0.5,
-            "similarity_boost": 0.5
+    while True:
+        # Esperar a recibir una recomendación desde la cola
+        respuesta_de_recomendacion = data_queue.get()
+
+        data = {
+            "text": respuesta_de_recomendacion,
+            "model_id": "eleven_multilingual_v2",
+            "voice_settings": {
+                "stability": 0.5,
+                "similarity_boost": 0.5
+            }
         }
-    }
 
-    response = requests.post(url, json=data, headers=headers)
+        response = requests.post(url, json=data, headers=headers)
 
-    if response.status_code == 200 and len(response.content) > 1024:
-        audio_file = 'output.mp3'
-        with open(audio_file, 'wb') as f:
-            f.write(response.content)
+        if response.status_code == 200 and len(response.content) > 1024:
+            audio_file = 'output.mp3'
+            with open(audio_file, 'wb') as f:
+                f.write(response.content)
 
-        # Inicializar pygame para reproducción de audio
-        pygame.mixer.init()
-        pygame.mixer.music.load(audio_file)
-        pygame.mixer.music.play()
+            # Inicializar pygame para reproducción de audio
+            pygame.mixer.init()
+            pygame.mixer.music.load(audio_file)
+            pygame.mixer.music.play()
 
-        # Esperar a que termine la reproducción
-        while pygame.mixer.music.get_busy():
-            time.sleep(1)
+            # Esperar a que termine la reproducción
+            while pygame.mixer.music.get_busy():
+                time.sleep(1)
 
-        # Detener la reproducción y desinicializar pygame
-        pygame.mixer.music.stop()
-        pygame.mixer.quit()
+            # Detener la reproducción y desinicializar pygame
+            pygame.mixer.music.stop()
+            pygame.mixer.quit()
 
-        # Eliminar el archivo después de la reproducción
-        os.remove(audio_file)
+            # Eliminar el archivo después de la reproducción
+            os.remove(audio_file)
 
-genera_voz_artificial()
+
 

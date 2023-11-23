@@ -25,7 +25,8 @@ import matplotlib.pyplot as plt
 
 import queue
 import threading #Libreria para utilizar hilos 
-from voz_artificial import generar_voz_artificial
+from voz_artificial import genera_voz_artificial
+from recomendaciones import recomendacion
 import panel_usuario
 from threading import Thread
 from time import strftime
@@ -112,7 +113,7 @@ def main():
     hilo_panel_usuario.start()
 
     # Hilo dedicado para voz_artificial
-    hilo_voz_artificial = threading.Thread(target=generar_voz_artificial, args=(data_queue,))
+    hilo_voz_artificial = threading.Thread(target=genera_voz_artificial, args=(data_queue,))
     hilo_voz_artificial.start()
 
 
@@ -122,7 +123,7 @@ def main():
     while lecturas <= total_lecturas-1:
         lecturas += 1 
 
-        #!Codigo de prueba
+        #!Codigo de prueba (simula lecturas)
         # Generar un nuevo valor para lectura_iuv
         lectura_iuv = random.randint(1, 13)
 
@@ -130,8 +131,11 @@ def main():
         # Filtro 2 - Lectura IUV dentro del rango [1-13 IUV]
         if 1 <= lectura_iuv <= 13:
             
-            obtener_fecha_actual()
             define_categoria(lectura_iuv)
+            recomendacion_texto = recomendacion(lectura_iuv, categoria) #!Prueba
+            data_queue.put(recomendacion_texto) #!Prueba
+            
+            obtener_fecha_actual()
             agregando_a_coleccion(lectura_iuv, categoria)  # Solo dos argumentos
             data_queue.put((lectura_iuv, categoria))
 
