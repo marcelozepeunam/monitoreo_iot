@@ -1,0 +1,45 @@
+#En este documento se detallaran los bugs pendientes por resolver en este proyecto:
+
+
+1- INICIO DE VARIABLES GLOBALES CON VALORES PREDETERMINADOS
+   Cuando comienza el monitoreo, por defecto se muestra 2 
+   variables globales:
+   lectura_iuv: 0
+   categoria: DESCONOCIDO
+   Si bien esto es una buena practica, en lo que se almacenan 
+   los valores reales en la coleccion (cola), existe un problema 
+   y es que se toman en cuenta esos valores como si fueran lecturas 
+   reales, esto afectara a graficas_resumen
+
+2- RECOMENDACIONES MÁS CORTAS
+   Las recomendaciones que se generan son demasiado largas
+   aproximadamente de 1 minuto.
+   Entonces debemos de modificar los few shots para generar 
+   recomendaciones más cortas
+
+1- TIEMPO DE SINCRONIZACION ENTRE HILOS
+    El tiempo en que se ejecuta el hilo panel_usuario
+    es aproximadamente de 1 segundo.
+    Mientras que el hilo de voz_artificial es de 90 segundos
+    creando una asincronia entre la interfaz grafica y la voz
+
+3- PRUEBAS REALES CON MQTT
+   Actualmente el proyecto genera lecturas_iuv simuladas,
+   estas se crean con la funcion random con valores entre
+   1 y 13, sin embrago es solo para probar el funcionamiento
+   correcto
+
+4- UTILIZAR 1 VENTANA PARA INTERFAZ GRAFICA
+   Para dar una mejor experiencia con el proyecto 
+   deberia de utilizar 1 sola ventana (o en su defecto 
+   un mismo hilo) para que se ejecuten:
+   -panel_usuario
+   -fallas_tecnicas
+   -graficas_resumen
+
+   *Tener cuidado en este proceso ya que requiere una 
+   logica más compleja, por ejemplo si en el monitoreo 
+   #4 ocurre un error, se mostrara la interfaz grafica
+   de fallas_tecnicas, pero tendremos que determinar 
+   como volver a la misma lectura, y que el tiempo de los
+   hilos no se vea afectado 

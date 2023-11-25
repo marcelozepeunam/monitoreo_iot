@@ -3,6 +3,9 @@ con base a los datos de lectura_iuv (lectura del sensor) y categoria.
 Se utilizo una tecnica de prompt engineer llamada few-shots la cual le muestra algunos ejemplos de 
 como se desea el resultado, de esta forma se evitan alucionaciones de GPT-4'''
 
+
+
+#!Hacer las recomendaciones más cortas
 #Modulo recomendaciones.py 
 
 import os 
