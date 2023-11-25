@@ -1,16 +1,23 @@
-#Modulo voz_artificial 
+'''Este modulo genera una recomendacion a traves de la API de openai, esta recomendacion es creada 
+con base a los datos de lectura_iuv (lectura del sensor) y categoria.
+Se utilizo una tecnica de prompt engineer llamada few-shots la cual le muestra algunos ejemplos de 
+como se desea el resultado, de esta forma se evitan alucionaciones de GPT-4'''
+
+#Modulo voz_artificial
+
 
 import requests
-from dotenv import load_dotenv
 import os
 import pygame
-from recomendaciones import respuesta_de_recomendacion
+import time
+from dotenv import load_dotenv
+
 
 load_dotenv()
 
-def voz_artificial():
+def genera_voz_artificial(data_queue):
     CHUNK_SIZE = 1024
-    url = "https://api.elevenlabs.io/v1/text-to-speech/g34gHuiq9eFHOygmLOnZ"
+    url = "https://api.elevenlabs.io/v1/text-to-speech/Cx2aqI2o6jdvuuXrogYa"
     XI_API_KEY = os.getenv("ELEVEN_API_KEY")
 
     headers = {
@@ -19,50 +26,41 @@ def voz_artificial():
         "xi-api-key": XI_API_KEY
     }
 
-    data = {
-        "text": str(respuesta_de_recomendacion),
-        "model_id": "eleven_multilingual_v2",
-        "voice_settings": {
-            "stability": 0.5,
-            "similarity_boost": 0.5
+    while True:
+        # Esperar a recibir una recomendación desde la cola
+        respuesta_de_recomendacion = data_queue.get()
+
+        data = {
+            "text": respuesta_de_recomendacion,
+            "model_id": "eleven_multilingual_v2",
+            "voice_settings": {
+                "stability": 0.5,
+                "similarity_boost": 0.5
+            }
         }
-    }
 
-    response = requests.post(url, json=data, headers=headers)
-    with open('voz_artificial.mp3', 'wb') as f:
-        for chunk in response.iter_content(chunk_size=CHUNK_SIZE):
-            if chunk:
-                f.write(chunk)
+        response = requests.post(url, json=data, headers=headers)
 
-    # Reproducir el archivo mp3
-    reproducir_audio('voz_artificial.mp3')
+        if response.status_code == 200 and len(response.content) > 1024:
+            audio_file = 'output.mp3'
+            with open(audio_file, 'wb') as f:
+                f.write(response.content)
 
-    # Borrar el archivo mp3
-    os.remove('voz_artificial.mp3')
+            # Inicializar pygame para reproducción de audio
+            pygame.mixer.init()
+            pygame.mixer.music.load(audio_file)
+            pygame.mixer.music.play()
 
-def reproducir_audio(archivo):
-    # Inicializar pygame
-    pygame.init()
+            # Esperar a que termine la reproducción
+            while pygame.mixer.music.get_busy():
+                time.sleep(1)
 
-    # Cargar y reproducir el archivo mp3
-    pygame.mixer.music.load(archivo)
-    pygame.mixer.music.play()
+            # Detener la reproducción y desinicializar pygame
+            pygame.mixer.music.stop()
+            pygame.mixer.quit()
 
-    # Esperar hasta que la música termine
-    while pygame.mixer.music.get_busy():
-        pygame.time.Clock().tick(10)
-
-    # Asegurarse de que la música ha dejado de reproducirse
-    pygame.mixer.music.unload()
-
-# Llamada a la función principal
-voz_artificial()
-
-
-
-
-
-
+            # Eliminar el archivo después de la reproducción
+            os.remove(audio_file)
 
 
 
