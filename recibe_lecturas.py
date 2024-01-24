@@ -1,4 +1,4 @@
-#Modulo recibe_lecturas
+#Modulo recibe_lecturas por medio de MQTT
 
 '''Este modulo es el encargado de recibir las lecturas (topic) por medio del
 protocolo MQTT.
