@@ -5,7 +5,7 @@ como se desea el resultado, de esta forma se evitan alucionaciones de GPT-4'''
 
 
 
-#!Hacer las recomendaciones más cortas
+
 #Modulo recomendaciones.py 
 
 import os 
@@ -26,28 +26,16 @@ def recomendacion(lectura_iuv, categoria):
     
     Te mostrare algunos ejemplos y con base a los ejemplos quiero que el output sea parecido:
 
-    Ejemplo 1 de output: Actualmente, la lectura del Índice Ultravioleta (IUV) es de 1, lo cual indica una 
-    categoría 'Baja'. Esto significa que el riesgo de daño por la exposición al sol es mínimo. Sin embargo, 
-    aún es recomendable usar protección si planeas estar al aire libre durante un tiempo prolongado. 
-    Para una protección óptima, considera usar gafas de sol y aplicar un protector solar con un FPS de al menos 15. 
-    ¡Disfruta del día de manera segura!
+    Ejemplo 1 de output: "IUV 1 (Bajo): Riesgo mínimo de daño solar. Aun así, usa protector solar 
+    FPS 15+ y gafas de sol si estarás al aire libre por largo tiempo. ¡Disfruta con seguridad!"
 
-    Ejemplo 2 de output: "¡Atención! La lectura actual del Índice Ultravioleta (IUV) es de 6, lo cual se clasifica en la 
-    categoría 'Alta'. 
-    Esto implica un riesgo elevado de daño por exposición al sol. 
-    Es altamente recomendable tomar medidas de protección, como usar un protector solar con un factor de protección solar (FPS) 
-    de al menos 30, llevar ropa que cubra la piel, usar sombrero y gafas de sol que bloqueen los rayos UV. 
-    Evita la exposición solar entre las 10 a.m. y las 4 p.m. si es posible. ¡Protege tu piel y disfruta del día de forma segura!"
+    Ejemplo 2 de output: IUV 6 (Alto): Riesgo elevado de daño solar. Usa protector solar FPS 30+, 
+    ropa protectora, sombrero y gafas UV. Evita el sol de 10 a.m. a 4 p.m. ¡Protege tu piel!
 
 
-    Ejemplo 3 de output: ¡Alerta Crítica! El Índice Ultravioleta (IUV) actual es de 11, lo cual se encuentra en la categoría 'Extremadamente 
-    Alta'. Este nivel representa un riesgo muy serio de daño por la exposición al sol. Es esencial tomar medidas de protección exhaustivas. 
-    Usa un protector solar con un factor de protección solar (FPS) de 50 o más, viste ropa de manga larga, pantalones y sombrero de ala ancha.
-    Las gafas de sol deben ofrecer protección completa contra los rayos UVA y UVB. Limita al máximo la exposición directa al sol, 
-    especialmente entre las 10 a.m. y las 4 p.m. 
-    Busca sombra siempre que sea posible y mantente hidratado. 
-    La exposición en estas condiciones puede causar graves quemaduras solares y daños en la piel a corto plazo. 
-    ¡Prioriza tu salud y seguridad!''' 
+    Ejemplo 3 de output: "IUV 11 (Extremo): Riesgo serio de daño solar. Aplica protector solar FPS 
+    50+, viste manga larga, pantalones, sombrero y gafas UV completas. Limita exposición solar, 
+    especialmente de 10 a.m. a 4 p.m., y mantente hidratado. ¡Prioriza tu salud!"''' 
 
     respuesta = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",  
