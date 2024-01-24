@@ -17,7 +17,7 @@ load_dotenv()
 
 def genera_voz_artificial(data_queue):
     CHUNK_SIZE = 1024
-    url = "https://api.elevenlabs.io/v1/text-to-speech/Cx2aqI2o6jdvuuXrogYa"
+    url = "https://api.elevenlabs.io/v1/text-to-speech/NgO5mdItOUAtAAnD7lsI"
     XI_API_KEY = os.getenv("ELEVEN_API_KEY")
 
     headers = {
