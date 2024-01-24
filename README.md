@@ -33,5 +33,5 @@ Es importante saber que para utilizar este proyecto correctamente se debe de cre
 https://platform.openai.com/overview
 https://elevenlabs.io/
 
-Estas keys por seguridad se guardaran en el archivo .env
-Su uso tiene un costo dependiendo del uso, se puede consultar en los mismos links.
+
+
