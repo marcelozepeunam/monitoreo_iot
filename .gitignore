@@ -6,5 +6,5 @@ __pycache__/
 .env
 
 #Otros archivos
-Bugs.txt
+bugs.txt
 test_velocidad.py
