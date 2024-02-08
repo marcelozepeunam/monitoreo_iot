@@ -6,9 +6,6 @@ Hora, Fecha, IUV, Categoria.
 Se utilizara programación concurrente (por hilos) para ejecutar este modulo y el 
 modulo main al mismo tiempo'''
 
-#!Hay 2 etiquetas de la hora (eliminar 1)
-#!Hacer un poco más pequeña la etiqueta de la fecha 
-#!Darle un salto de linea entre fecha y lectura_iuv con categoria
 
 #Modulo panel_usuario 
 
@@ -71,7 +68,7 @@ def iniciar_interfaz_usuario(data_queue):
         etiqueta_hm.config(text=strftime("%H:%M"))
         etiqueta_s.config(text=strftime("%S"))
         etiqueta_fecha.config(text=strftime("%A, %d / %m / %Y"))
-        etiqueta_s.after(1000, actualiza_reloj)
+        etiqueta_s.after(120000, actualiza_reloj) #Actualiza pantalla cada 2 minutos
 
     # Etiquetas y Widgets
     frame_hora = Frame()
@@ -88,7 +85,7 @@ def iniciar_interfaz_usuario(data_queue):
     etiqueta_fecha = Label(font=("digitalk", 40), text="dia dd/mm/aaaa")   #Tamaño de letra para Raspberry
     etiqueta_fecha.pack(anchor="center")
 
-    etiqueta_lectura = Label(app, font=("digitalk", 90), text=f"\n{lectura_iuv} IUV: {categoria}")
+    etiqueta_lectura = Label(app, font=("digitalk", 60), text=f"\n{lectura_iuv} IUV: {categoria}")
     etiqueta_lectura.pack(anchor="s")
 
     # Inicia el reloj y la simulación de datos
