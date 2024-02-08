@@ -76,13 +76,16 @@ def iniciar_interfaz_usuario(data_queue):
     # Etiquetas y Widgets
     frame_hora = Frame()
     frame_hora.pack()
-    etiqueta_hm = Label(frame_hora, font=("digitalk", 150), text=("H:M"))
+    #etiqueta_hm = Label(frame_hora, font=("digitalk", 150), text=("H:M")) #Tamaño de letra para pantalla
+    etiqueta_hm = Label(frame_hora, font=("digitalk", 80), text=("H:M"))   #Tamaño de letra para Raspberry
     etiqueta_hm.grid(row=0, column=0)
 
-    etiqueta_s = Label(frame_hora, font=("digitalk", 100), text="s")
+    #etiqueta_s = Label(frame_hora, font=("digitalk", 100), text="s")      #Tamaño de letra para pantalla
+    etiqueta_s = Label(frame_hora, font=("digitalk", 60), text="s")        #Tamaño de letra para Raspberry
     etiqueta_s.grid(row=0, column=1, sticky="n")
 
-    etiqueta_fecha = Label(font=("digitalk", 80), text="dia dd/mm/aaaa")
+    #etiqueta_fecha = Label(font=("digitalk", 80), text="dia dd/mm/aaaa")   #Tamaño de letra para pantalla
+    etiqueta_fecha = Label(font=("digitalk", 40), text="dia dd/mm/aaaa")   #Tamaño de letra para Raspberry
     etiqueta_fecha.pack(anchor="center")
 
     etiqueta_lectura = Label(app, font=("digitalk", 90), text=f"\n{lectura_iuv} IUV: {categoria}")

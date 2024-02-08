@@ -1,5 +1,10 @@
 # Ignorar la carpeta __pycache__/
 __pycache__/
+*.pyc
 
 # Ignorar el archivo .env
 .env
+
+#Otros archivos
+Bugs.txt
+test_velocidad.py

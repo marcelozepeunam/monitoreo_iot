@@ -33,7 +33,7 @@ from time import strftime
 
 
 # !Libreria de prueba
-import random
+#import random
 
 # VARIABLES Y CONSTANTES   
 volver_inicio = True 
@@ -125,15 +125,15 @@ def main():
 
         #!Codigo de prueba (simula lecturas)
         # Generar un nuevo valor para lectura_iuv
-        lectura_iuv = random.randint(1, 13)
+        #lectura_iuv = random.randint(1, 13)
 
 
         # Filtro 2 - Lectura IUV dentro del rango [1-13 IUV]
         if 1 <= lectura_iuv <= 13:
             
             define_categoria(lectura_iuv)
-            recomendacion_texto = recomendacion(lectura_iuv, categoria) #!Prueba
-            data_queue.put(recomendacion_texto) #!Prueba
+            recomendacion_texto = recomendacion(lectura_iuv, categoria) 
+            data_queue.put(recomendacion_texto) 
             
             obtener_fecha_actual()
             agregando_a_coleccion(lectura_iuv, categoria)  # Solo dos argumentos

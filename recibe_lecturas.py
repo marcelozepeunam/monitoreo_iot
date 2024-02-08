@@ -22,7 +22,8 @@ def on_message(client, userdata, message):
 
 def iniciar_servidor_mqtt():
     # Configura las credenciales para conectarse al broker MQTT
-    mqtt_broker = "192.168.1.150"  # Cambia esto por la dirección de tu broker MQTT
+    #mqtt_broker = "192.168.1.150"  # IP red celular
+    mqtt_broker = "192.168.1.150"  # IP extensor de red
     mqtt_port = 1883  # Puerto predeterminado para MQTT
 
     # Crea una instancia del cliente MQTT
