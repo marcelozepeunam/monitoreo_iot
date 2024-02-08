@@ -104,6 +104,7 @@ def muestra_resumen():
     lectura_moda = statistics.mode(lecturas_registradas)
 
 #!Funcion del programa principal con hilos (panel_usuario y voz_artificial)
+lectura_iuv = 0  # Valor inicial o predeterminado
 def main():
 
     global lecturas
