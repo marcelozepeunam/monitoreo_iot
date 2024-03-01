@@ -7,8 +7,6 @@ El servidor se configuró para que este a la escucha continuamente'''
 import paho.mqtt.client as mqtt
 
 def manejar_lectura_iuv(lectura_iuv):
-    # Aquí puedes realizar cualquier operación que desees con la variable "lectura_iuv"
-    # Por ejemplo, imprimir su valor o almacenarlo en una lista, base de datos, etc.
     print(f"Lectura IUV recibida: {lectura_iuv}")
 
 def on_message(client, userdata, message):
@@ -43,3 +41,8 @@ def iniciar_servidor_mqtt():
 
 if __name__ == "__main__":
     iniciar_servidor_mqtt()
+
+
+
+
+

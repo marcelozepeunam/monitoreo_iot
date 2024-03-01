@@ -25,15 +25,13 @@ import matplotlib.pyplot as plt
 
 import queue
 import threading #Libreria para utilizar hilos 
-from voz_artificial import genera_voz_artificial
-from recomendaciones import recomendacion
+from voz_artificial import genera_voz_artificial #Hilo 1
+from recomendaciones import recomendacion #Hilo 2
 import panel_usuario
 from threading import Thread
 from time import strftime
 
 
-# !Libreria de prueba
-#import random
 
 # VARIABLES Y CONSTANTES   
 volver_inicio = True 
@@ -108,6 +106,7 @@ lectura_iuv = 0  # Valor inicial o predeterminado
 def main():
 
     global lecturas
+    global errores_de_lectura
 
     # Hilo dedicado para panel_usuario 
     hilo_panel_usuario = threading.Thread(target=panel_usuario.iniciar_interfaz_usuario, args=(data_queue,))
@@ -123,11 +122,6 @@ def main():
     # Filtro 1 - Número de lecturas no mayor a 30
     while lecturas <= total_lecturas-1:
         lecturas += 1 
-
-        #!Codigo de prueba (simula lecturas)
-        # Generar un nuevo valor para lectura_iuv
-        #lectura_iuv = random.randint(1, 13)
-
 
         # Filtro 2 - Lectura IUV dentro del rango [1-13 IUV]
         if 1 <= lectura_iuv <= 13:
