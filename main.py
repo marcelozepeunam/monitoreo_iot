@@ -1,15 +1,3 @@
-'''Notas 
-Para activar el entorno virtual:
-1- tesis_env\Scripts\activate
-
-IMPORTANTE AGREGAR EL COMANDO PARA QUE AL ENCENDER RASPBERRY
-    SE EJECUTE EL SCRIPT, VER EL SIGUIENTE VIDEO: 
-    https://www.youtube.com/watch?v=_aUXG5d2YLY&list=PLxws6VhyQsd0HPBAuLx910MJJ7bC9MMp2&index=11&ab_channel=inobotica
-    
-    Para acceder al README En la parte superior derecha del archivo "README.md", veremos un icono 
-    llamado "Open Preview" (Abrir Vista Previa). Haz clic en él para ver cómo se verá el README 
-    formateado.'''
-
 
 #Modulo main 
 
@@ -18,7 +6,7 @@ import datetime
 import time 
 import os
 import statistics
-#import paho.mqtt.client as mqtt
+import paho.mqtt.client as mqtt
 
 import graficas_resumen
 import matplotlib.pyplot as plt
@@ -33,14 +21,23 @@ from time import strftime
 
 
 
-# VARIABLES Y CONSTANTES   
+#? VARIABLES Y CONSTANTES REALES
+#volver_inicio = True 
+#lecturas = 0               # Comienza desde 0 lecturas
+#total_lecturas = 10        # 10 lecturas
+#errores_de_lectura = 0     # Comienza desde 0 errores
+#pausa_entre_procesos = 60  # 1 minuto
+#pausa_error = 3            # 3 seg
+#pausa_resumen = 60         # 60 seg
+
+#VARIABLES Y CONSTANTES DE PRUEBA
 volver_inicio = True 
-lecturas = 0 # Comienza desde 0 lecturas
-total_lecturas = 2 # Total de  30 lecturas
-errores_de_lectura = 0 # Comienza desde 0 errores
-pausa_entre_procesos = 60 # 1 seg
-pausa_error = 10 # 30 seg
-pausa_resumen = 10 # 30 seg
+lecturas = 0                # Comienza desde 0 lecturas
+total_lecturas = 3          # Total de  30 lecturas
+errores_de_lectura = 0      # Comienza desde 0 errores
+pausa_entre_procesos = 60   # 1 seg
+pausa_error = 10            # 30 seg
+pausa_resumen = 10          # 30 seg
 
 
 #Creando instancia de la cola 
@@ -53,19 +50,19 @@ horas_registradas = []
 fechas_registradas = []
 
 
-# FUNCIONES
-# Función para determinar fecha 
+#?FUNCIONES
+# Función devolver la fecha actual en formato dd/mm/aaaa.
 def obtener_fecha_actual():
     fecha_actual = datetime.datetime.now()
     fecha_formateada = fecha_actual.strftime("%d / %m / %Y")
     return fecha_formateada
 
-# Función para determinar el tiempo
+# Función para imprimir la hora actual en formato HH:MM:SS
 def hora_actual():
     print(strftime("%H:%M:%S"))
     time.sleep(1)
 
-# Función que define la categoría
+# Función que define las categorías dependiendo del indice UV proporcionado
 def define_categoria(lectura_iuv):
     global categoria
     if lectura_iuv <= 2:
@@ -79,7 +76,8 @@ def define_categoria(lectura_iuv):
     elif lectura_iuv >= 11:
         categoria = "EXTREMO"
 
-# Función que agrega datos a sus respectivas listas
+
+#Función que agrega datos a las colecciones de lecturas, categorías, horas y fechas registradas.
 def agregando_a_coleccion(lectura_iuv, categoria):
     fecha = obtener_fecha_actual()  # Llama a la función para obtener la fecha
     hora = strftime("%H:%M:%S")  # Obtiene la hora actual
@@ -89,31 +87,35 @@ def agregando_a_coleccion(lectura_iuv, categoria):
     horas_registradas.append(hora)
     fechas_registradas.append(fecha)
 
-# Función que procesa resumen
-def muestra_resumen():
-    global lectura_min
-    global lectura_max
-    global lecturas_prom
-    global lectura_moda
+# Función que procesa resumen #!Esta funcion me esta causando problemas
+#def muestra_resumen():
+#    global lectura_min
+#    global lectura_max
+#    global lecturas_prom
+#    global lectura_moda
     
-    lectura_max = max(lecturas_registradas)
-    lectura_min = min(lecturas_registradas)
-    lecturas_prom = sum(lecturas_registradas) / len(lecturas_registradas)
-    lectura_moda = statistics.mode(lecturas_registradas)
+#    lectura_max = max(lecturas_registradas)
+#    lectura_min = min(lecturas_registradas)
+#    lecturas_prom = sum(lecturas_registradas) / len(lecturas_registradas)
+#    lectura_moda = statistics.mode(lecturas_registradas)
 
-#!Funcion del programa principal con hilos (panel_usuario y voz_artificial)
 lectura_iuv = 0  # Valor inicial o predeterminado
-def main():
 
+
+#?FUNCIÓN PRINCIPAL
+#Función principal del programa que inicia los hilos y controla el flujo del programa.
+#Hilo 1: hilo_panel_usuario
+#Hilo 2: hilo_voz_artificial
+def main():
     global lecturas
     global errores_de_lectura
 
     # Hilo dedicado para panel_usuario 
-    hilo_panel_usuario = threading.Thread(target=panel_usuario.iniciar_interfaz_usuario, args=(data_queue,))
+    hilo_panel_usuario = threading.Thread(target=panel_usuario.iniciar_interfaz_usuario, args=(data_queue,)) #Para que sea tupla, debo de agregar la coma al final
     hilo_panel_usuario.start()
 
-    # Hilo dedicado para voz_artificial
-    hilo_voz_artificial = threading.Thread(target=genera_voz_artificial, args=(data_queue,))
+    # Hilo dedicado para voz_artificial 
+    hilo_voz_artificial = threading.Thread(target=genera_voz_artificial, args=(data_queue,)) #Para que sea tupla, debo de agregar la coma al final
     hilo_voz_artificial.start()
 
 
@@ -133,6 +135,7 @@ def main():
             obtener_fecha_actual()
             agregando_a_coleccion(lectura_iuv, categoria)  # Solo dos argumentos
             data_queue.put((lectura_iuv, categoria))
+            print("Datos enviados a la cola:", (lectura_iuv, categoria))
 
             # Imprimir los valores registrados en este paso
             print([lectura_iuv, categoria, horas_registradas[-1], fechas_registradas[-1]])
@@ -157,18 +160,21 @@ def main():
 
 
         if lecturas >= total_lecturas:
-            muestra_resumen()  
+            #muestra_resumen()  
+            print("Fin del programa")
+            time.sleep(3)
 
-            #!Error en las graficas, ya que no cierran automaticamente 
+
+            #?Las ventanas de estas graficas se deben de cerrar manualmente
             #Incova a grafica de barras
-            graficas_resumen.grafica_barras(horas_registradas, lecturas_registradas)
-            plt.pause(pausa_entre_procesos)  
-            plt.close('all')
+            #graficas_resumen.grafica_barras(horas_registradas, lecturas_registradas)
+            #plt.pause(pausa_entre_procesos)  
+            #plt.close('all')
 
             #Invoca a grafica de pastel
-            graficas_resumen.grafica_pastel(lecturas_prom, lectura_min, lectura_max, lectura_moda)
-            plt.pause(pausa_entre_procesos) 
-            plt.close('all')
+            #graficas_resumen.grafica_pastel(lecturas_prom, lectura_min, lectura_max, lectura_moda)
+            #plt.pause(pausa_entre_procesos) 
+            #plt.close('all')
 
 
     # Esperar a que los hilos terminen
