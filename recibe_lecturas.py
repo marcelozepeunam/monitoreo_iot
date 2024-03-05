@@ -39,6 +39,7 @@ def iniciar_servidor_mqtt():
     # Bucle principal para mantener la conexión MQTT activa
     mqtt_client.loop_forever()
 
+
 if __name__ == "__main__":
     iniciar_servidor_mqtt()
 

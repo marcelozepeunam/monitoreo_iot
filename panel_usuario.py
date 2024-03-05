@@ -27,8 +27,12 @@ def iniciar_interfaz_usuario(data_queue):
     # Funcion que actualiza las variables lectura_iuv y categoria
     def actualizar_datos_sensor(nueva_lectura, nueva_categoria):
         global lectura_iuv, categoria
+        
         lectura_iuv = nueva_lectura
         categoria = nueva_categoria
+        
+        print("Nueva lectura IUV:", lectura_iuv) #!Borrar esta linea
+        print("Nueva categoria:", categoria) #!Borrar esta linea
         actualizar_interfaz()
 
     # Función que actualiza la interfaz de usuario

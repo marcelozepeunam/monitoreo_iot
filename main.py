@@ -8,9 +8,6 @@ import os
 import statistics
 import paho.mqtt.client as mqtt
 
-import graficas_resumen
-import matplotlib.pyplot as plt
-
 import queue
 import threading #Libreria para utilizar hilos 
 from voz_artificial import genera_voz_artificial #Hilo 1
@@ -33,9 +30,9 @@ from time import strftime
 #VARIABLES Y CONSTANTES DE PRUEBA
 volver_inicio = True 
 lecturas = 0                # Comienza desde 0 lecturas
-total_lecturas = 3          # Total de  30 lecturas
+total_lecturas = 5          # Total de  30 lecturas
 errores_de_lectura = 0      # Comienza desde 0 errores
-pausa_entre_procesos = 60   # 1 seg
+pausa_entre_procesos = 120   # 1 seg
 pausa_error = 10            # 30 seg
 pausa_resumen = 10          # 30 seg
 
@@ -163,18 +160,6 @@ def main():
             #muestra_resumen()  
             print("Fin del programa")
             time.sleep(3)
-
-
-            #?Las ventanas de estas graficas se deben de cerrar manualmente
-            #Incova a grafica de barras
-            #graficas_resumen.grafica_barras(horas_registradas, lecturas_registradas)
-            #plt.pause(pausa_entre_procesos)  
-            #plt.close('all')
-
-            #Invoca a grafica de pastel
-            #graficas_resumen.grafica_pastel(lecturas_prom, lectura_min, lectura_max, lectura_moda)
-            #plt.pause(pausa_entre_procesos) 
-            #plt.close('all')
 
 
     # Esperar a que los hilos terminen
