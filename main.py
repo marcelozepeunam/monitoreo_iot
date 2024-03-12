@@ -84,25 +84,12 @@ def agregando_a_coleccion(lectura_iuv, categoria):
     horas_registradas.append(hora)
     fechas_registradas.append(fecha)
 
-# Función que procesa resumen #!Esta funcion me esta causando problemas
-#def muestra_resumen():
-#    global lectura_min
-#    global lectura_max
-#    global lecturas_prom
-#    global lectura_moda
-    
-#    lectura_max = max(lecturas_registradas)
-#    lectura_min = min(lecturas_registradas)
-#    lecturas_prom = sum(lecturas_registradas) / len(lecturas_registradas)
-#    lectura_moda = statistics.mode(lecturas_registradas)
 
 lectura_iuv = 0  # Valor inicial o predeterminado
 
 
 #?FUNCIÓN PRINCIPAL
 #Función principal del programa que inicia los hilos y controla el flujo del programa.
-#Hilo 1: hilo_panel_usuario
-#Hilo 2: hilo_voz_artificial
 def main():
     global lecturas
     global errores_de_lectura
@@ -118,7 +105,7 @@ def main():
 
     volver_inicio = True
 
-    # Filtro 1 - Número de lecturas no mayor a 30
+    # Filtro 1 - Número de lecturas no mayor a 0
     while lecturas <= total_lecturas-1:
         lecturas += 1 
 

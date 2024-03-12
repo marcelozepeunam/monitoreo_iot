@@ -15,6 +15,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+pygame.mixer.init()
+
 def genera_voz_artificial(data_queue):
     CHUNK_SIZE = 1024
     url = "https://api.elevenlabs.io/v1/text-to-speech/NgO5mdItOUAtAAnD7lsI"
@@ -47,7 +49,6 @@ def genera_voz_artificial(data_queue):
                 f.write(response.content)
 
             # Inicializar pygame para reproducción de audio
-            pygame.mixer.init()
             pygame.mixer.music.load(audio_file)
             pygame.mixer.music.play()
 

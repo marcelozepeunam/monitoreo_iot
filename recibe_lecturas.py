@@ -12,6 +12,7 @@ def manejar_lectura_iuv(lectura_iuv):
 def on_message(client, userdata, message):
     try:
         lectura_iuv = float(message.payload.decode("utf-8"))  
+        print(f"Tópico: {message.topic} - Lectura IUV recibida: {lectura_iuv}") #!Prueba
         manejar_lectura_iuv(lectura_iuv)
     except ValueError:
         print("Error: Lectura IUV no válida")
