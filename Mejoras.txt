@@ -1,0 +1,9 @@
+Bugs por resolver:
+1-   No se actualizan datos de panel_usuario
+1.1- No se reproduce voz_artificial
+
+Mejoras:
+1- Mostrar una única ventana para:
+   panel_usuario
+   fallas_tecnicas
+   graficas_resumen
