@@ -8,13 +8,19 @@ como se desea el resultado, de esta forma se evitan alucionaciones de GPT-4'''
 
 #Modulo recomendaciones.py 
 
-import os 
+
+
+import logging
 import openai
 from dotenv import load_dotenv
+import os
 
-load_dotenv()
+# Configuración del logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 def recomendacion(lectura_iuv, categoria):
+    # Carga la clave API desde .env para mayor seguridad
+    load_dotenv()
     api_key = os.getenv("OPENAI_API_KEY")
     openai.api_key = api_key
 
@@ -24,32 +30,24 @@ def recomendacion(lectura_iuv, categoria):
     La recomendación se debe basar en un indice ultravioleta de {lectura_iuv},
     y de categoria {categoria}.
     
-    Te mostrare algunos ejemplos y con base a los ejemplos quiero que el output sea parecido:
+    Ejemplos de output son proporcionados para guiar la generación de recomendaciones adecuadas.'''
 
-    Ejemplo 1 de output: "IUV 1 (Bajo): Riesgo mínimo de daño solar. Aun así, usa protector solar 
-    FPS 15+ y gafas de sol si estarás al aire libre por largo tiempo. ¡Disfruta con seguridad!"
+    try:
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",  
+            messages=[
+                {"role": "system", "content": prompt}
+            ]
+        )
+        recomendacion_texto = response.choices[0].message['content'].strip()
+        logging.info(f"Recomendación generada con éxito para IUV {lectura_iuv} y categoría {categoria}.")
+        return recomendacion_texto
+    except Exception as e:
+        logging.error(f"Error al generar recomendación: {e}")
+        return "Error al generar recomendación."
 
-    Ejemplo 2 de output: IUV 6 (Alto): Riesgo elevado de daño solar. Usa protector solar FPS 30+, 
-    ropa protectora, sombrero y gafas UV. Evita el sol de 10 a.m. a 4 p.m. ¡Protege tu piel!
-
-
-    Ejemplo 3 de output: "IUV 11 (Extremo): Riesgo serio de daño solar. Aplica protector solar FPS 
-    50+, viste manga larga, pantalones, sombrero y gafas UV completas. Limita exposición solar, 
-    especialmente de 10 a.m. a 4 p.m., y mantente hidratado. ¡Prioriza tu salud!"''' 
-
-    respuesta = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",  
-        messages=[
-            {"role": "system", "content": prompt}
-        ]
-    )
-    respuesta_de_recomendacion = respuesta.choices[0].message['content'].strip()
-    return respuesta_de_recomendacion
-
-#Ejemplo de uso
-#lectura_iuv = 1
-#categoria = "baja" 
-#respuesta_de_recomendacion = recomendacion(lectura_iuv, categoria)
-#print("\nRecomendación: ")
-#print(respuesta_de_recomendacion)
-
+# Ejemplo de cómo se usaría la función
+#if __name__ == "__main__":
+#    lectura_iuv = 5
+#    categoria = "MODERADO"
+#    print(recomendacion(lectura_iuv, categoria))

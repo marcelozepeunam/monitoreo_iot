@@ -159,6 +159,7 @@ if __name__ == "__main__":
 import datetime
 import time
 import queue
+import logging #Debug (10), Info (20), Warning (30), Error(40), Critical(50)
 import threading
 from recibe_lecturas import iniciar_servidor_mqtt  # Importa solo lo necesario
 from voz_artificial import genera_voz_artificial  # Hilo 1
@@ -167,7 +168,7 @@ import panel_usuario
 from time import strftime
 
 # VARIABLES Y CONSTANTES DE PRUEBA
-lvolver_inicio = True 
+volver_inicio = True 
 lecturas = 0                # Comienza desde 0 lecturas
 total_lecturas = 5          # Total de  30 lecturas
 errores_de_lectura = 0      # Comienza desde 0 errores
@@ -184,9 +185,14 @@ categorias_registradas = []
 horas_registradas = []
 fechas_registradas = []
 
+# Configuración del formato de logging 
+logging.basicConfig(filename='main.log', filemode='w', format='%(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
+
+
 # FUNCIONES
-def obtener_fecha_actual():
+
 # Función devolver la fecha actual en formato dd/mm/aaaa.
+def obtener_fecha_actual():
     fecha_actual = datetime.datetime.now()
     fecha_formateada = fecha_actual.strftime("%d / %m / %Y")
     return fecha_formateada
@@ -209,10 +215,17 @@ def agregando_a_coleccion(lectura_iuv, categoria):
 
 # FUNCIÓN PRINCIPAL
 def main():
+    logging.info("Inicio de la aplicación") #?Logging info 
+
     #Iniciando los hilos para el servidor MQTT, panel usuario y voz_artificial
     threading.Thread(target=iniciar_servidor_mqtt, args=(data_queue,)).start()
+    logging.info("El hilo para el servidor MQTT ha sido iniciado.") #?Logging info 
+
     threading.Thread(target=panel_usuario.iniciar_interfaz_usuario, args=(data_queue,)).start()
+    logging.info("El hilo para el panel de usuario ha sido iniciado.") #?Logging info 
+
     threading.Thread(target=genera_voz_artificial, args=(data_queue,)).start()
+    logging.info("El hilo para la voz artificial ha sido iniciado.") #?Logging info 
 
     global lecturas, errores_de_lectura
 
@@ -223,11 +236,11 @@ def main():
         try:
             # Espera por una nueva lectura y su categoría de data_queue
             lectura_iuv, categoria = data_queue.get(timeout=pausa_entre_procesos)
-            print("Lectura UV y categoría consumidas de data_queue:", lectura_iuv, categoria)
+            logging.info(f"Lectura UV y categoría consumidas de data_queue: {lectura_iuv}, {categoria}")  #?Logging info
             
             # Aquí deberías generar recomendaciones o realizar otras acciones con los datos
             recomendacion_texto = recomendacion(lectura_iuv, categoria)
-            print("Recomendación generada:", recomendacion_texto)
+            logging.info(f"Recomendación generada: {recomendacion_texto}")
             
             # Agregar datos a las colecciones para un posterior resumen o análisis
             agregando_a_coleccion(lectura_iuv, categoria)
@@ -236,21 +249,28 @@ def main():
 
         except queue.Empty:
             # En caso de timeout (no se reciben datos en el tiempo esperado)
-            print("Timeout: No se recibieron datos")
+            logging.warning(f"Timeout: No se recibieron datos después de {pausa_entre_procesos} segundos. Intentos fallidos: {errores_de_lectura}. Total de lecturas procesadas: {lecturas}.") #?Logging info
+            
             errores_de_lectura += 1
             if errores_de_lectura >= 3:
                 # Manejo de errores repetidos, podría incluir mostrar fallas técnicas o reintentar la conexión
-                print("Error: Demasiados intentos fallidos de recibir datos.")
+                logging.warning("Error: Demasiados intentos fallidos de recibir datos.")
                 break
 
     if lecturas >= total_lecturas:
         # Aquí podrías mostrar un resumen de las lecturas y categorías procesadas
+        logging.info("Lecturas completas con éxito") #?Logging info
         print("Fin del programa. Lecturas completas:", lecturas)
+        
+
     
     
     # Espera a que los hilos terminen (opcional, dependiendo de tu lógica específica)
     hilo_panel_usuario.join()
     hilo_voz_artificial.join()
+
+    #Logging para el fin del programa main
+    logging.info("Fin del programa. Todas las operaciones han sido completadas.") #?Logging info
 
 if __name__ == "__main__":
     main()

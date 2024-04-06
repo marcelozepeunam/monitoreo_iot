@@ -50,43 +50,62 @@ if __name__ == "__main__":
 
 
 import paho.mqtt.client as mqtt
+import logging
+
+# Configuración del logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 def on_message(client, userdata, message, data_queue):
-    print("Mensaje recibido en topic:", message.topic)
+    logging.debug(f"Mensaje recibido en topic: {message.topic}")
     try:
         lectura_iuv = float(message.payload.decode("utf-8"))
+        logging.debug(f"Payload del mensaje: {message.payload}")
 
-        #Definiendo la categoria dependiendo del valor IUV 
+        # Definiendo la categoria dependiendo del valor IUV
         if lectura_iuv <= 2:
-            "BAJO"
+            categoria = "BAJO"
         elif 3 <= lectura_iuv <= 5:
-            "MODERADO"
+            categoria = "MODERADO"
         elif 6 <= lectura_iuv <= 7:
-            "ALTO"
+            categoria = "ALTO"
         elif 8 <= lectura_iuv <= 10:
-            "MUY ALTO"
+            categoria = "MUY ALTO"
         elif lectura_iuv >= 11:
-            "EXTREMO"
+            categoria = "EXTREMO"
         else:
-            "DESCONOCIDA"
+            categoria = "DESCONOCIDA"
         
         # Poner la lectura y la categoría en data_queue
         data_queue.put((lectura_iuv, categoria))
-    except ValueError:
-        print("Error: Lectura IUV no válida")
-    except Exception as e:
-        print(f"Error inesperado: {e}")
+        logging.info(f"Se recibió lectura {lectura_iuv} con éxito, categoría: {categoria}")
 
-# Esta función ahora necesita recibir data_queue como argumento
+    except ValueError:
+        logging.warning("No se recibió lectura válida")
+    except Exception as e:
+        logging.error(f"Error inesperado: {e}")
+
 def iniciar_servidor_mqtt(data_queue):
-    mqtt_broker = "192.168.1.103" #!Cambiar IP dependiendo en donde se conecte
-    mqtt_port = 1883 
+    mqtt_broker = "192.168.1.103"  # Cambiar IP dependiendo de donde se conecte
+    mqtt_port = 1883
     mqtt_client = mqtt.Client()
-    
-    # Necesitarías ajustar la asignación de on_message para pasar data_queue
-    mqtt_client.on_message = lambda client, userdata, message: on_message(client, userdata, message, data_queue)
-    
+
+    # Inicia la conexión y suscripción
+    logging.info(f"Conectando al broker MQTT en {mqtt_broker}:{mqtt_port}")
     mqtt_client.connect(mqtt_broker, mqtt_port)
+
+    # Suscripción al tópico
     mqtt_client.subscribe("lectura_iuv")
-    mqtt_client.loop_forever()
+    logging.info(f"Suscrito exitosamente al tópico 'lectura_iuv'")
+
+    # Ajuste de la función de callback para mensajes
+    mqtt_client.on_message = lambda client, userdata, msg: on_message(client, userdata, msg, data_queue)
+
+    # Inicia el bucle de escucha de mensajes
+    try:
+        mqtt_client.loop_forever()
+    except KeyboardInterrupt:
+        logging.info("Desconectando del broker MQTT...")
+        mqtt_client.disconnect()
+        logging.info("Desconectado del broker MQTT.")
+
 

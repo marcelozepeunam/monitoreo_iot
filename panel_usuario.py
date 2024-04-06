@@ -38,16 +38,16 @@ def iniciar_interfaz_usuario(data_queue):
         etiqueta_lectura.config(foreground=color_lectura_iuv, text=f"\n{lectura_iuv} IUV: {categoria}")
 
     # Función que devuelve el color de acuerdo al valor de lectura_iuv
-    def Color_categoria(valor):
-        if valor <= 2:
+    def Color_categoria(lectura_iuv):
+        if lectura_iuv <= 2:
             return "green"
-        elif 3 <= valor <= 5:
+        elif 3 <= lectura_iuv <= 5:
             return "yellow"
-        elif 6 <= valor <= 7:
+        elif 6 <= lectura_iuv <= 7:
             return "orange"
-        elif 8 <= valor <= 10:
+        elif 8 <= lectura_iuv <= 10:
             return "red"
-        elif valor >= 11:
+        elif lectura_iuv >= 11:
             return "purple"
         else:
             return "grey"
@@ -57,6 +57,7 @@ def iniciar_interfaz_usuario(data_queue):
         global lectura_iuv, categoria
         if not data_queue.empty():
             nueva_lectura, nueva_categoria = data_queue.get()
+            print(f"Nuevos datos recibidos: {nueva_lectura}, {nueva_categoria}") #?Linea de prueba
             actualizar_datos_sensor(nueva_lectura, nueva_categoria)
         app.after(1000, verifica_y_actualiza)  # Actualiza cada segundo
 
