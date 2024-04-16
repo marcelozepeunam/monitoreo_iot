@@ -50,8 +50,11 @@ def on_message(client, userdata, message, data_queue):
 def iniciar_servidor_mqtt(data_queue):
     load_dotenv()
 
-    logging.info("Inicializando conexión MQTT...") #?logging info
-    mqtt_broker = os.getenv("MQTT_SERVER_IP")  # Cambiar IP dependiendo de donde se conecte
+    logging.info("Inicializando conexión MQTT...")  # Logging info
+    mqtt_broker = os.getenv("MQTT_SERVER_IP")  # Obtener la IP desde variable de entorno sin valor predeterminado
+    if not mqtt_broker:
+        logging.error("La dirección IP del servidor MQTT no está configurada. Defina MQTT_SERVER_IP en el archivo .env.") #?Logging info
+        raise ValueError("La dirección IP del servidor MQTT no está configurada.")
     mqtt_port = 1883
     mqtt_client = mqtt.Client()
 
