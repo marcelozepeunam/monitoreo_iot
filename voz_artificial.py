@@ -5,8 +5,6 @@ como se desea el resultado, de esta forma se evitan alucionaciones de GPT-4'''
 
 #Modulo voz_artificial
 
-
-
 import requests
 import os
 import pygame
@@ -43,6 +41,7 @@ def genera_voz_artificial(data_queue):
             response = requests.post(url, json=data, headers=headers)
 
             if response.status_code == 200 and len(response.content) > 1024:
+                logging.warning(f"Respuesta no exitosa de la API de voz. Estado: {response.status_code}, Longitud del contenido: {len(response.content)}")
                 audio_file = 'output.mp3'
                 with open(audio_file, 'wb') as f:
                     f.write(response.content)

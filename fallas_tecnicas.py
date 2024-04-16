@@ -7,10 +7,15 @@ cuando se presento un error en la logica principal'''
 
 import tkinter  as tk
 from tkinter import Label
+import logging 
 
+# Configuración inicial de logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s') #?Logging info
 
+#Funcion fallas_tecnicas
 def fallas_tecnicas():
-    
+    logging.info("Activación del módulo de fallas técnicas.") #? Logging info 
+
     #Creando ventana
     ventana = tk.Tk()
     ventana.title("Mantenimiento")
@@ -32,6 +37,8 @@ def fallas_tecnicas():
     etiqueta1.place(relx=0.5, rely=0.2, anchor="center")
     etiqueta2.place(relx=0.5, rely=0.5, anchor="center")
     etiqueta3.place(relx=0.5, rely=0.8, anchor="center")
+
+    logging.info("Ventana de mantenimiento mostrada correctamente.") #?Logging info
 
     ventana.mainloop()
     

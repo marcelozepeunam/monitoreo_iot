@@ -8,12 +8,14 @@ modulo main al mismo tiempo'''
 
 
 #Modulo panel_usuario 
-
-
 import tkinter as tk
+import logging
 from tkinter import *
 from tkinter.ttk import *
 from time import strftime
+
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 # Inicializa las variables globales con valores predeterminados
@@ -22,18 +24,19 @@ categoria = "DESCONOCIDA"
 
 
 
-def iniciar_interfaz_usuario(data_queue):
+def iniciar_interfaz_usuario(data_queue, abc):
 
     # Funcion que actualiza las variables lectura_iuv y categoria
     def actualizar_datos_sensor(nueva_lectura, nueva_categoria):
         global lectura_iuv, categoria
-        
+        logging.info(f"Actualizando datos sensor a {nueva_lectura}, {nueva_categoria}") #?Logging info
         lectura_iuv = nueva_lectura
         categoria = nueva_categoria
         actualizar_interfaz()
 
     # Función que actualiza la interfaz de usuario
     def actualizar_interfaz():
+        logging.info(f"Actualizando interfaz con IUV: {lectura_iuv}, Categoría: {categoria}") #?Logging info
         color_lectura_iuv = Color_categoria(lectura_iuv)
         etiqueta_lectura.config(foreground=color_lectura_iuv, text=f"\n{lectura_iuv} IUV: {categoria}")
 
@@ -55,9 +58,13 @@ def iniciar_interfaz_usuario(data_queue):
     # Función que se llama periódicamente para actualizar los datos desde la cola
     def verifica_y_actualiza():
         global lectura_iuv, categoria
+        #Verifica que la cola no este vacia
+        logging.info(f"Valor de abc: {abc}")
+        actualizar_datos_sensor(abc, 10)
         if not data_queue.empty():
+            logging.info("Actualizo correctamente") 
             nueva_lectura, nueva_categoria = data_queue.get()
-            print(f"Nuevos datos recibidos: {nueva_lectura}, {nueva_categoria}") #?Linea de prueba
+            logging.info(f"Nuevos datos recibidos: {nueva_lectura}, {nueva_categoria}")
             actualizar_datos_sensor(nueva_lectura, nueva_categoria)
         app.after(1000, verifica_y_actualiza)  # Actualiza cada segundo
 
@@ -70,7 +77,8 @@ def iniciar_interfaz_usuario(data_queue):
         etiqueta_hm.config(text=strftime("%H:%M"))
         etiqueta_s.config(text=strftime("%S"))
         etiqueta_fecha.config(text=strftime("%A, %d / %m / %Y"))
-        etiqueta_s.after(120000, actualiza_reloj) #Actualiza pantalla cada 2 minutos
+        #etiqueta_s.after(120000, actualiza_reloj) 
+        etiqueta_s.after(1000, actualiza_reloj) 
 
     # Etiquetas y Widgets
     frame_hora = Frame()

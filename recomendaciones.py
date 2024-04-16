@@ -8,8 +8,6 @@ como se desea el resultado, de esta forma se evitan alucionaciones de GPT-4'''
 
 #Modulo recomendaciones.py 
 
-
-
 import logging
 import openai
 from dotenv import load_dotenv
