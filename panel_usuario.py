@@ -56,15 +56,26 @@ def iniciar_interfaz_usuario(data_queue):
             return "grey"
 
     # Función que se llama periódicamente para actualizar los datos desde la cola
+#    def verifica_y_actualiza():
+#        global lectura_iuv, categoria
+#        #Verifica que la cola no este vacia
+#        if not data_queue.empty():
+#            logging.info("Actualizo correctamente") 
+#            nueva_lectura, nueva_categoria = data_queue.get()
+#            logging.info(f"Nuevos datos recibidos: {nueva_lectura}, {nueva_categoria}")
+#            actualizar_datos_sensor(nueva_lectura, nueva_categoria)
+#        app.after(1000, verifica_y_actualiza)  # Actualiza cada segundo
+        
     def verifica_y_actualiza():
-        global lectura_iuv, categoria
-        #Verifica que la cola no este vacia
-        if not data_queue.empty():
-            logging.info("Actualizo correctamente") 
-            nueva_lectura, nueva_categoria = data_queue.get()
-            logging.info(f"Nuevos datos recibidos: {nueva_lectura}, {nueva_categoria}")
-            actualizar_datos_sensor(nueva_lectura, nueva_categoria)
-        app.after(1000, verifica_y_actualiza)  # Actualiza cada segundo
+        try:
+            while not data_queue.empty():  # Procesa todos los elementos disponibles en la cola
+                nueva_lectura, nueva_categoria = data_queue.get_nowait()
+                logging.info(f"Nuevos datos recibidos: {nueva_lectura}, {nueva_categoria}")
+                actualizar_datos_sensor(nueva_lectura, nueva_categoria)
+        except queue.Empty:
+            pass  # La cola está vacía
+        finally:
+            app.after(1000, verifica_y_actualiza)  # Programa la próxima verificación en 1 segundo
 
     app = tk.Tk()
     app.geometry("1920x1080")
