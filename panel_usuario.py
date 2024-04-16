@@ -24,7 +24,7 @@ categoria = "DESCONOCIDA"
 
 
 
-def iniciar_interfaz_usuario(data_queue, abc):
+def iniciar_interfaz_usuario(data_queue):
 
     # Funcion que actualiza las variables lectura_iuv y categoria
     def actualizar_datos_sensor(nueva_lectura, nueva_categoria):
@@ -59,8 +59,6 @@ def iniciar_interfaz_usuario(data_queue, abc):
     def verifica_y_actualiza():
         global lectura_iuv, categoria
         #Verifica que la cola no este vacia
-        logging.info(f"Valor de abc: {abc}")
-        actualizar_datos_sensor(abc, 10)
         if not data_queue.empty():
             logging.info("Actualizo correctamente") 
             nueva_lectura, nueva_categoria = data_queue.get()

@@ -24,8 +24,6 @@ pausa_resumen = 10          # 30 seg
 
 # Creando instancia de la cola
 data_queue = queue.Queue()
-global abc
-abc=0
 
 # Colecciones vacías para almacenar información
 lecturas_registradas = []
@@ -68,9 +66,9 @@ def main():
 
     #Creando los hilos
     # Creando los hilos
-    #!hilo_servidor_mqtt = threading.Thread(target=iniciar_servidor_mqtt, args=(data_queue,))
-    hilo_servidor_mqtt = threading.Thread(target=iniciar_servidor_mqtt, args=(data_queue, abc, ))
-    hilo_panel_usuario = threading.Thread(target=panel_usuario.iniciar_interfaz_usuario, args=(data_queue, abc,))
+    hilo_servidor_mqtt = threading.Thread(target=iniciar_servidor_mqtt, args=(data_queue,))
+    hilo_servidor_mqtt = threading.Thread(target=iniciar_servidor_mqtt, args=(data_queue,))
+    hilo_panel_usuario = threading.Thread(target=panel_usuario.iniciar_interfaz_usuario, args=(data_queue,))
     hilo_voz_artificial = threading.Thread(target=genera_voz_artificial, args=(data_queue,))
     
 
