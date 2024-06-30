@@ -32,7 +32,7 @@ volver_inicio = True
 lecturas = 0                # Comienza desde 0 lecturas
 total_lecturas = 5          # Total de  30 lecturas
 errores_de_lectura = 0      # Comienza desde 0 errores
-pausa_entre_procesos = 120   # 1 seg
+pausa_entre_procesos = 30   # 1 seg
 pausa_error = 10            # 30 seg
 pausa_resumen = 10          # 30 seg
 
