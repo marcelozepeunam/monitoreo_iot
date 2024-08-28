@@ -1,7 +1,5 @@
-'''Este modulo genera una recomendacion a traves de la API de openai, esta recomendacion es creada 
-con base a los datos de lectura_iuv (lectura del sensor) y categoria.
-Se utilizo una tecnica de prompt engineer llamada few-shots la cual le muestra algunos ejemplos de 
-como se desea el resultado, de esta forma se evitan alucionaciones de GPT-4'''
+'''Este modulo genera una recomendacion a traves de la API de openai, esta recomendacion es creada con base a los datos de lectura_iuv (lectura del sensor) y categoria.
+Se utilizó tecnicas de prompt engineer como "few-shots" la cual le muestra algunos ejemplos de como se desea el resultado, de esta forma se evitan alucionaciones de GPT-4'''
 
 #Modulo voz_artificial
 
@@ -17,7 +15,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 def genera_voz_artificial(data_queue):
     load_dotenv()
     XI_API_KEY = os.getenv("ELEVEN_API_KEY")
-    url = "https://api.elevenlabs.io/v1/text-to-speech/NgO5mdItOUAtAAnD7lsI"
+    url = "https://api.elevenlabs.io/v1/text-to-speech/OPa7mOx679yrlEZ1ooEi"
     headers = {
         "Accept": "audio/mpeg",
         "Content-Type": "application/json",
@@ -64,3 +62,6 @@ def genera_voz_artificial(data_queue):
             break  # O manejar de otra forma
 
     pygame.mixer.quit()
+
+
+
