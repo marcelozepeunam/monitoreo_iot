@@ -11,3 +11,5 @@ env/
 #Otros archivos
 bugs.txt
 test_velocidad.py
+venv/
+venv/
