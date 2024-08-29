@@ -3,7 +3,7 @@ import os
 import pygame
 import logging
 from dotenv import load_dotenv
-from queue import Queue  # Asegúrate de importar Queue si lo estás utilizando
+from queue import Queue  
 
 # Configuración del logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
