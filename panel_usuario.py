@@ -8,12 +8,14 @@ modulo main al mismo tiempo'''
 
 
 #Modulo panel_usuario 
-
-
 import tkinter as tk
+import logging
 from tkinter import *
 from tkinter.ttk import *
 from time import strftime
+
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 # Inicializa las variables globales con valores predeterminados
@@ -27,38 +29,53 @@ def iniciar_interfaz_usuario(data_queue):
     # Funcion que actualiza las variables lectura_iuv y categoria
     def actualizar_datos_sensor(nueva_lectura, nueva_categoria):
         global lectura_iuv, categoria
-        
+        logging.info(f"Actualizando datos sensor a {nueva_lectura}, {nueva_categoria}") #?Logging info
         lectura_iuv = nueva_lectura
         categoria = nueva_categoria
         actualizar_interfaz()
 
     # Función que actualiza la interfaz de usuario
     def actualizar_interfaz():
+        logging.info(f"Actualizando interfaz con IUV: {lectura_iuv}, Categoría: {categoria}") #?Logging info
         color_lectura_iuv = Color_categoria(lectura_iuv)
         etiqueta_lectura.config(foreground=color_lectura_iuv, text=f"\n{lectura_iuv} IUV: {categoria}")
 
     # Función que devuelve el color de acuerdo al valor de lectura_iuv
-    def Color_categoria(valor):
-        if valor <= 2:
+    def Color_categoria(lectura_iuv):
+        if lectura_iuv <= 2:
             return "green"
-        elif 3 <= valor <= 5:
+        elif 3 <= lectura_iuv <= 5:
             return "yellow"
-        elif 6 <= valor <= 7:
+        elif 6 <= lectura_iuv <= 7:
             return "orange"
-        elif 8 <= valor <= 10:
+        elif 8 <= lectura_iuv <= 10:
             return "red"
-        elif valor >= 11:
+        elif lectura_iuv >= 11:
             return "purple"
         else:
             return "grey"
 
     # Función que se llama periódicamente para actualizar los datos desde la cola
+#    def verifica_y_actualiza():
+#        global lectura_iuv, categoria
+#        #Verifica que la cola no este vacia
+#        if not data_queue.empty():
+#            logging.info("Actualizo correctamente") 
+#            nueva_lectura, nueva_categoria = data_queue.get()
+#            logging.info(f"Nuevos datos recibidos: {nueva_lectura}, {nueva_categoria}")
+#            actualizar_datos_sensor(nueva_lectura, nueva_categoria)
+#        app.after(1000, verifica_y_actualiza)  # Actualiza cada segundo
+        
     def verifica_y_actualiza():
-        global lectura_iuv, categoria
-        if not data_queue.empty():
-            nueva_lectura, nueva_categoria = data_queue.get()
-            actualizar_datos_sensor(nueva_lectura, nueva_categoria)
-        app.after(1000, verifica_y_actualiza)  # Actualiza cada segundo
+        try:
+            while not data_queue.empty():  # Procesa todos los elementos disponibles en la cola
+                nueva_lectura, nueva_categoria = data_queue.get_nowait()
+                logging.info(f"Nuevos datos recibidos: {nueva_lectura}, {nueva_categoria}")
+                actualizar_datos_sensor(nueva_lectura, nueva_categoria)
+        except queue.Empty:
+            pass  # La cola está vacía
+        finally:
+            app.after(1000, verifica_y_actualiza)  # Programa la próxima verificación en 1 segundo
 
     app = tk.Tk()
     app.geometry("1920x1080")
@@ -69,7 +86,8 @@ def iniciar_interfaz_usuario(data_queue):
         etiqueta_hm.config(text=strftime("%H:%M"))
         etiqueta_s.config(text=strftime("%S"))
         etiqueta_fecha.config(text=strftime("%A, %d / %m / %Y"))
-        etiqueta_s.after(120000, actualiza_reloj) #Actualiza pantalla cada 2 minutos
+        #etiqueta_s.after(120000, actualiza_reloj) 
+        etiqueta_s.after(1000, actualiza_reloj) 
 
     # Etiquetas y Widgets
     frame_hora = Frame()

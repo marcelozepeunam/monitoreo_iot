@@ -1,0 +1,6 @@
+root - INFO - Inicio de la aplicación
+root - INFO - El hilo para el servidor MQTT ha sido iniciado.
+root - INFO - El hilo para el panel de usuario ha sido iniciado.
+root - INFO - El hilo para la voz artificial ha sido iniciado.
+root - WARNING - Timeout: No se recibieron datos
+root - WARNING - Timeout: No se recibieron datos

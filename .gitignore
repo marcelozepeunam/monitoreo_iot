@@ -5,6 +5,11 @@ __pycache__/
 # Ignorar el archivo .env
 .env
 
+#Ignorar entorno virtual (venv)
+env/
+
 #Otros archivos
 bugs.txt
 test_velocidad.py
+venv/
+venv/

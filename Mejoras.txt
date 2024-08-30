@@ -1,0 +1,23 @@
+Bugs por resolver:
+1-   No se actualizan datos de panel_usuario
+1.1- No se reproduce voz_artificial
+
+Mejoras:
+1- Crear un config.py en el cual voy a almacenar datos como:
+# Configuraciones del broker MQTT
+MQTT_BROKER_IP = "192.168.1.103"
+MQTT_BROKER_PORT = 1883
+# Configuraciones del programa
+TOTAL_LECTURAS = 5
+PAUSA_ENTRE_PROCESOS = 120
+2- Dormir thereads tanto en solicitudes para las apis como 
+3- Manejo de reintentos
+
+2- Automatizar script para raspberry para: 
+"mosquitto_sub -h localhost -t "lectura_iuv" -u "marcelozepe" -P "unam2023"
+python3 main.py
+
+1- Mostrar una única ventana para:
+   panel_usuario
+   fallas_tecnicas
+   graficas_resumen
