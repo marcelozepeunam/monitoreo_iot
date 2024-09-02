@@ -1,5 +1,5 @@
 #Modulo recibe_lecturas
-
+#"""
 import os
 import paho.mqtt.client as mqtt
 import logging
@@ -79,3 +79,32 @@ def iniciar_servidor_mqtt(data_queue):
         logging.info("Desconectando del broker MQTT...") #?Logging info
         mqtt_client.disconnect()
         logging.info("Desconectado del broker MQTT.") #?Logging info
+#"""
+
+"""
+import random
+import time
+
+intervalo_tiempo =120
+total_lecturas=5
+
+def iniciar_servidor_mqtt(data_queue):
+    time.sleep(5)
+    lecturas_generadas=0
+    while lecturas_generadas < total_lecturas:
+        lectura_iuv = random.randint(1,11)
+        if lectura_iuv <=2:
+            categoria="BAJO"
+        elif lectura_iuv <=5:
+            categoria="MODERADO"
+        elif lectura_iuv <=7:
+            categoria="ALTO"
+        elif lectura_iuv <=10:
+            categoria="MUY ALTO"
+        elif lectura_iuv <=11:
+            categoria="EXTREMO"
+        
+        data_queue.put((lectura_iuv,categoria))
+        lecturas_generadas +=1
+        time.sleep(intervalo_tiempo)
+"""

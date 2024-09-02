@@ -37,6 +37,7 @@ def recomendacion(lectura_iuv, categoria):
         return "Error al generar recomendación."
 
 # Ejemplo de uso
+"""
 if __name__ == "__main__":
     lectura_iuv = int(input("Lectura_iuv: "))
                       
@@ -54,3 +55,4 @@ if __name__ == "__main__":
         categoria = "DESCONOCIDA"
     
     print(recomendacion(lectura_iuv, categoria))
+"""

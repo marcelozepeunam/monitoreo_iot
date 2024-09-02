@@ -13,7 +13,7 @@ import logging
 from tkinter import *
 from tkinter.ttk import *
 from time import strftime
-
+import queue
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -24,7 +24,7 @@ categoria = "DESCONOCIDA"
 
 
 
-def iniciar_interfaz_usuario(data_queue):
+def iniciar_interfaz_usuario(ui_queue):
 
     # Funcion que actualiza las variables lectura_iuv y categoria
     def actualizar_datos_sensor(nueva_lectura, nueva_categoria):
@@ -68,8 +68,8 @@ def iniciar_interfaz_usuario(data_queue):
         
     def verifica_y_actualiza():
         try:
-            while not data_queue.empty():  # Procesa todos los elementos disponibles en la cola
-                nueva_lectura, nueva_categoria = data_queue.get_nowait()
+            while not ui_queue.empty():  # Procesa todos los elementos disponibles en la cola
+                nueva_lectura, nueva_categoria = ui_queue.get_nowait()
                 logging.info(f"Nuevos datos recibidos: {nueva_lectura}, {nueva_categoria}")
                 actualizar_datos_sensor(nueva_lectura, nueva_categoria)
         except queue.Empty:

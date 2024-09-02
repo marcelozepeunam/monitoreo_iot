@@ -8,7 +8,7 @@ from queue import Queue
 # Configuración del logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-def genera_voz_artificial(data_queue):
+def genera_voz_artificial(voz_queue):
     load_dotenv()
     XI_API_KEY = os.getenv("ELEVEN_API_KEY")
 
@@ -27,7 +27,7 @@ def genera_voz_artificial(data_queue):
 
     while True:
         try:
-            respuesta_de_recomendacion = data_queue.get()
+            respuesta_de_recomendacion = voz_queue.get()
             if respuesta_de_recomendacion is None:  # Salir del bucle si no hay datos
                 break
 

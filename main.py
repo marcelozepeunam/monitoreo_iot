@@ -9,15 +9,13 @@ from recomendaciones import recomendacion
 from voz_artificial import genera_voz_artificial
 
 volver_inicio = True 
-lecturas = 0                # Comienza desde 0 lecturas
-total_lecturas = 5          # Total de  30 lecturas
-errores_de_lectura = 0      # Comienza desde 0 errores
-pausa_entre_procesos = 120   # 1 seg
-pausa_error = 10            # 30 seg
-pausa_resumen = 10          # 30 seg
+lecturas = 0                
+total_lecturas = 5          
+errores_de_lectura = 0     
+pausa_entre_procesos = 120  
+pausa_error = 10            
+pausa_resumen = 10          
 
-
-#Creando instancia de la cola 
 data_queue = queue.Queue()
 ui_queue = queue.Queue()
 voz_queue = queue.Queue()
