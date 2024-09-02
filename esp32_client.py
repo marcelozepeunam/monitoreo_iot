@@ -1,46 +1,62 @@
- import machine
+#PROYECTO FINAL
+
+import machine
 import time
 import network
-from umqtt.simple import MQTTClient
+from umqtt.simple import MQTTClient, MQTTException
 
-#Recordar que CLIENTE y SERVIDOR deben de trabajar bajo la misma red
-nombre_red = "INFINITUM0643" #!RED DE CASA (PRUEBA)
-contrasena_red = "NnPFUtCDuG"
+# Configuración de red
+nombre_red = ""
+contrasena_red = ""
 
-#nombre_red = "" #!RED DE CELULAR (PRODUCCIÓN)
-#contrasena_red = ""
+# Configuración de parámetros para la comunicación
+MQTT_SERVER = ""  # Broker público de Eclipse
+#MQTT_USER = "marcelozepe_unam" # Nombre de usuario
+#MQTT_PASSWORD = "unam2023"     # Contraseña
 
-# Creando instancia WLAN para la configuración de red
+MQTT_USER = "" # Nombre de usuario
+MQTT_PASSWORD = ""     # Contraseña
+MQTT_PORT = 1883
+MQTT_TOPIC = b"lectura_iuv"
+
+# Conectando a la red
 wlan = network.WLAN(network.STA_IF)
 wlan.active(True)
-wlan.connect(nombre_red, contrasena_red)  #Nombre de red y contraseña
+wlan.connect(nombre_red, contrasena_red)
 
-# Verificando el estado de la conexión
+# Espera hasta que la conexión sea exitosa
+max_attempts = 10
+attempts = 0
+while not wlan.isconnected() and attempts < max_attempts:
+    print("Intentando conectar a la red...")
+    time.sleep(2)
+    attempts += 1
+
 if wlan.isconnected():
     print("Conexión exitosa")
 else:
     print("Error al conectar a la red")
+    while True:
+        time.sleep(1)  # Mantener el ESP32 en un bucle si no puede conectar
 
-# Configuración de parámetros para la comunicación
-MQTT_SERVER = " 192.168.67.90"  # Dirección IP de la Raspberry Pi
-MQTT_PORT = 1883               # Puerto MQTT predeterminado de Mosquitto (broker)
-MQTT_USER = "marcelozepe_unam" # Nombre de usuario
-MQTT_PASSWORD = "unam2023"     # Contraseña
-MQTT_TOPIC = b"voltaje"        # Tópico MQTT para publicar el voltaje (utilizar bytes)
-
-# Creando instancia para establecer la conexión
-client = MQTTClient("esp32_client", MQTT_SERVER, MQTT_PORT, MQTT_USER, MQTT_PASSWORD)
-client.connect()
-
+# Conexión al broker MQTT
+try:
+    client = MQTTClient("esp32_client", MQTT_SERVER, MQTT_PORT, MQTT_USER, MQTT_PASSWORD)
+    client.connect()
+    print("Conectado al servidor MQTT")
+except MQTTException as e:
+    print("Error al conectar al servidor MQTT:", e)
+    while True:
+        time.sleep(1)  # Mantener el ESP32 en un bucle si no puede conectar al MQTT
 
 def convertidor_adc():
     adc = machine.ADC(machine.Pin(36))
-    adc.atten(machine.ADC.ATTN_11DB)    # ATENUACIÓN
-    adc.width(machine.ADC.WIDTH_11BIT)  # RESOLUCIÓN
+    adc.atten(machine.ADC.ATTN_11DB)
+    adc.width(machine.ADC.WIDTH_11BIT)
 
     lectura_digital = adc.read()
     lectura_analogica = (lectura_digital / 2048) * 3.3
-    voltaje = custom_map(lectura_analogica, 0.99, 2.7, 0, 15)  # Mapeo con los parámetros especificados
+    voltaje = custom_map(lectura_analogica, 0.99, 2.7, 0, 15)
     voltaje = round(voltaje, 2)
     voltaje = abs(voltaje)
 
@@ -52,10 +68,8 @@ def convertidor_adc():
     # Publicar el voltaje en el tópico MQTT
     client.publish(MQTT_TOPIC, str(voltaje))
 
-
 def custom_map(value, in_min, in_max, out_min, out_max):
     return (value - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
-
 
 while True:
     convertidor_adc()
